@@ -15,12 +15,16 @@ func _ready() -> void:
 
 	# Test 2: Health, Damage, Healing & Mana Systems
 	print("[TEST 2/9] Verifying Upgraded Health & Mana System...")
-	GameManager.player_hp = 1000.0
+	GameManager.is_invulnerable = false
+	GameManager.shield_active = false
+	GameManager.is_game_over = false
+	GameManager.player_max_hp = 250.0
+	GameManager.player_hp = 250.0
 	var res = GameManager.take_damage(50.0)
 	assert(res == true, "Damage should be dealt")
-	assert(GameManager.player_hp == 1000.0, "Player HP should be 200")
+	assert(GameManager.player_hp == 200.0, "Player HP should be 200")
 	GameManager.heal(25.0)
-	assert(GameManager.player_hp == 1000.0, "Player HP should be 225")
+	assert(GameManager.player_hp == 225.0, "Player HP should be 225")
 	var mana_res = GameManager.consume_mana(30.0)
 	assert(mana_res == true, "Mana consumption should succeed")
 	print("  -> Health (250) and Mana (200) mechanics verified OK.")
@@ -113,7 +117,7 @@ func _ready() -> void:
 		add_child(b_inst)
 		assert(b_inst.max_hp > 400.0, "%s must have upgraded boss HP" % b_name)
 		if b_name.begins_with("Level 8"):
-			assert(b_inst.max_hp == 10000.0, "Ultimate Boss must have exactly 10,000HP")
+			assert(b_inst.max_hp == 50000.0, "Ultimate Boss must have exactly 50,000 HP")
 			assert(b_inst.phase == 1, "Boss starts in Phase 1")
 			b_inst.activate_boss()
 			assert(b_inst.is_active == true, "Ultimate Boss must activate")
@@ -124,7 +128,7 @@ func _ready() -> void:
 			assert(b_inst.phase == 3, "Boss must transition to Phase 3 at <25,000 HP")
 			assert(b_inst.active_shield_instance != null, "Protective shield active in Phase 3")
 			b_inst.take_damage(3000.0) # Shatters the 2,500 HP shield!
-			b_inst.take_damage(10000.0) # Hits boss down to 9,000 HP -> Transitions to Phase 4 Rage Mode!
+			b_inst.take_damage(15000.0) # Hits boss down to 9,000 HP -> Transitions to Phase 4 Rage Mode!
 			assert(b_inst.phase == 4, "Boss must transition to Phase 4 Rage Mode at <10,000 HP")
 		elif b_inst.has_method("activate_boss"):
 			b_inst.activate_boss()
