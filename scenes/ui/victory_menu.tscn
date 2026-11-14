@@ -1,0 +1,158 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/victory_menu.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/forest/sky.png" id="2_sky"]
+[ext_resource type="Texture2D" path="res://assets/ui/panel_bg.png" id="3_panel"]
+[ext_resource type="Texture2D" path="res://assets/ui/button_normal.png" id="4_btn"]
+[ext_resource type="Texture2D" path="res://assets/ui/button_hover.png" id="5_hov"]
+[ext_resource type="Texture2D" path="res://assets/ui/button_pressed.png" id="6_prs"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font_size = 28
+font_color = Color(1, 0.88, 0.4, 1)
+outline_size = 5
+outline_color = Color(0.1, 0.05, 0.15, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_sub"]
+font_size = 14
+font_color = Color(0.85, 0.95, 1, 1)
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="VictoryMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_sky")
+expand_mode = 1
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -170.0
+offset_right = 200.0
+offset_bottom = 170.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_panel")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+
+[node name="VBox" type="VBoxContainer" parent="NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 18.0
+offset_right = -24.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Title" type="Label" parent="NinePatchRect/VBox"]
+layout_mode = 2
+text = "VICTORY ACHIEVED!"
+label_settings = SubResource("LabelSettings_title")
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="NinePatchRect/VBox"]
+layout_mode = 2
+text = "The Dark Wizard has fallen!
+The power of magic protects the realm once more!"
+label_settings = SubResource("LabelSettings_sub")
+horizontal_alignment = 1
+
+[node name="CrystalsLabel" type="Label" parent="NinePatchRect/VBox"]
+layout_mode = 2
+text = "Crystals Collected: 0"
+label_settings = SubResource("LabelSettings_sub")
+horizontal_alignment = 1
+
+[node name="PlayAgainBtn" type="TextureButton" parent="NinePatchRect/VBox"]
+custom_minimum_size = Vector2(180, 42)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("4_btn")
+texture_pressed = ExtResource("6_prs")
+texture_hover = ExtResource("5_hov")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="NinePatchRect/VBox/PlayAgainBtn"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Play Again"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelSelectBtn" type="TextureButton" parent="NinePatchRect/VBox"]
+custom_minimum_size = Vector2(180, 42)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("4_btn")
+texture_pressed = ExtResource("6_prs")
+texture_hover = ExtResource("5_hov")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="NinePatchRect/VBox/LevelSelectBtn"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Level Select"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainMenuBtn" type="TextureButton" parent="NinePatchRect/VBox"]
+custom_minimum_size = Vector2(180, 42)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("4_btn")
+texture_pressed = ExtResource("6_prs")
+texture_hover = ExtResource("5_hov")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="NinePatchRect/VBox/MainMenuBtn"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Main Menu"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="NinePatchRect/VBox/PlayAgainBtn" to="." method="_on_play_again_pressed"]
+[connection signal="pressed" from="NinePatchRect/VBox/LevelSelectBtn" to="." method="_on_level_select_pressed"]
+[connection signal="pressed" from="NinePatchRect/VBox/MainMenuBtn" to="." method="_on_main_menu_pressed"]

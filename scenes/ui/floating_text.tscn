@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/floating_text.gd" id="1_script"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ft"]
+font_size = 14
+outline_size = 3
+outline_color = Color(0, 0, 0, 1)
+
+[node name="FloatingText" type="Node2D"]
+z_index = 100
+script = ExtResource("1_script")
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -12.0
+offset_right = 100.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "+100"
+label_settings = SubResource("LabelSettings_ft")
+horizontal_alignment = 1
+vertical_alignment = 1

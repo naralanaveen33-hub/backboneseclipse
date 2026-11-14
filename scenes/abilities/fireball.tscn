@@ -1,0 +1,71 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/abilities/fireball.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/effects/projectiles/fireball_0.png" id="2_f0"]
+[ext_resource type="Texture2D" path="res://assets/effects/projectiles/fireball_1.png" id="3_f1"]
+[ext_resource type="Texture2D" path="res://assets/effects/projectiles/fireball_2.png" id="4_f2"]
+[ext_resource type="Texture2D" path="res://assets/effects/projectiles/fireball_3.png" id="5_f3"]
+[ext_resource type="Texture2D" path="res://assets/effects/projectiles/explosion_0.png" id="6_e0"]
+[ext_resource type="Texture2D" path="res://assets/effects/projectiles/explosion_1.png" id="7_e1"]
+[ext_resource type="Texture2D" path="res://assets/effects/projectiles/explosion_2.png" id="8_e2"]
+[ext_resource type="Texture2D" path="res://assets/effects/projectiles/explosion_3.png" id="9_e3"]
+[ext_resource type="Texture2D" path="res://assets/effects/projectiles/explosion_4.png" id="10_e4"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_f0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_f1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_f2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_f3")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_e0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_e1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_e2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_e3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_e4")
+}],
+"loop": false,
+"name": &"explode",
+"speed": 16.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_col"]
+radius = 10.0
+
+[node name="Fireball" type="Area2D"]
+collision_layer = 8
+collision_mask = 5
+script = ExtResource("1_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_fb")
+animation = &"fly"
+autoplay = "fly"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_col")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

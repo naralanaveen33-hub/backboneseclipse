@@ -1,0 +1,85 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/flying_bat.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/flying_bat/fly_0.png" id="2_f0"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/flying_bat/fly_1.png" id="3_f1"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/flying_bat/fly_2.png" id="4_f2"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/flying_bat/fly_3.png" id="5_f3"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/flying_bat/hurt_0.png" id="6_h0"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/flying_bat/hurt_1.png" id="7_h1"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/flying_bat/death_0.png" id="8_d0"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/flying_bat/death_1.png" id="9_d1"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/flying_bat/death_2.png" id="10_d2"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bat"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_d0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_d1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_d2")
+}],
+"loop": false,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_f0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_f1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_f2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_f3")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_h0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_h1")
+}],
+"loop": false,
+"name": &"hurt",
+"speed": 8.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_body"]
+radius = 10.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hit"]
+radius = 12.0
+
+[node name="FlyingBat" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_bat")
+animation = &"fly"
+autoplay = "fly"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_body")
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("CircleShape2D_hit")
+
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]

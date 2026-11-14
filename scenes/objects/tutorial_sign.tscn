@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/objects/tutorial_sign.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/tiles/tutorial_sign.png" id="2_tex"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_col"]
+radius = 48.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_sign"]
+font_size = 12
+font_color = Color(1, 0.95, 0.8, 1)
+outline_size = 3
+outline_color = Color(0.1, 0.08, 0.15, 1)
+
+[node name="TutorialSign" type="Area2D"]
+collision_layer = 32
+collision_mask = 2
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_col")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -120.0
+offset_top = -42.0
+offset_right = 120.0
+offset_bottom = -16.0
+label_settings = SubResource("LabelSettings_sign")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

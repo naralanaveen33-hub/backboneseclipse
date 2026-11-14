@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>MYSTIC REALMS: BOUNCE BACK</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #06040a;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #game-container {
+      position: relative;
+      width: 960px;
+      height: 540px;
+      max-width: 100vw;
+      max-height: 100vh;
+      aspect-ratio: 16 / 9;
+      box-shadow: 0 0 30px rgba(120, 60, 240, 0.4), 0 0 80px rgba(0, 0, 0, 0.9);
+      background: #0a0814;
+      border: 2px solid rgba(160, 100, 255, 0.3);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    canvas {
+      width: 100%;
+      height: 100%;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      display: block;
+    }
+    /* CRT Scanline & Glow Overlay */
+    .scanlines {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      background: linear-gradient(rgba(18, 16, 26, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+      background-size: 100% 4px, 6px 100%;
+      z-index: 10;
+    }
+    /* Controls hint overlay */
+    #controls-hint {
+      position: absolute;
+      bottom: 8px;
+      left: 12px;
+      font-size: 11px;
+      color: rgba(220, 210, 255, 0.7);
+      background: rgba(10, 8, 20, 0.65);
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(140, 100, 255, 0.2);
+      pointer-events: none;
+      z-index: 20;
+    }
+    /* Sound toggle button */
+    #sound-btn {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: rgba(25, 20, 45, 0.85);
+      border: 1px solid rgba(180, 130, 255, 0.4);
+      color: #ffd768;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      z-index: 30;
+      transition: all 0.2s;
+    }
+    #sound-btn:hover {
+      background: rgba(60, 45, 95, 0.95);
+      border-color: #ffd768;
+      box-shadow: 0 0 10px rgba(255, 215, 100, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+<div id="game-container">
+  <canvas id="gameCanvas" width="960" height="540"></canvas>
+  <div class="scanlines"></div>
+  <button id="sound-btn">🔊 AUDIO: ON</button>
+  <div id="controls-hint">
+    [A/D] Move | [Space/W] Jump | [Left-Click/J] Fire (Aimable & Recoil!) | [Right-Click/I] Parry Deflect | [Q] Rebound Overdrive | [R] Respawn | [Esc] Pause
+  </div>
+</div>
+
+<script>
+/**
+ * MYSTIC REALMS: BOUNCE BACK
+ * Complete Single-File HTML5 Game Jam Edition
+ * Integrates all 5 "Bounce Back" mechanics:
+ * 1. Ricochet & Deflection Combat (3x/5x wall bounces, damage scaling, timed parry)
+ * 2. Magical Recoil Rocket-Jumping (shooting downward/against walls propels player)
+ * 3. Damage-to-Power Rebound Overdrive Meter (shockwave + golden frenzy)
+ * 4. "From Ashes to Power" Prologue & Revivable Ruined Shrines
+ * 5. Game Jam Juice (hit-stop, pitch-escalating pings, floating combo text, shake)
+ */
+
+// --- AUDIO SYNTHESIS & SOUNDTRACK ENGINE (Web Audio API) ---
+const AudioEngine = (() => {
+  let ctx = null;
+  let muted = false;
+  let musicGain = null;
+  let sfxGain = null;
+  let bgmPlaying = false;
+  let bgmStep = 0;
+  let bgmTimer = null;
+
+  function init() {
+    if (!ctx) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      ctx = new AudioCtx();
+      musicGain = ctx.createGain();
+      musicGain.gain.value = 0.22;
+      musicGain.connect(ctx.destination);
+      sfxGain = ctx.createGain();
+      sfxGain.gain.value = 0.45;
+      sfxGain.connect(ctx.destination);
+      startBGM();
+    } else if (ctx.state === 'suspended') {
+      ctx.resume();
+    }
+  }
+
+  function toggleMute() {
+    init();
+    muted = !muted;
+    if (musicGain && sfxGain) {
+      musicGain.gain.value = muted ? 0 : 0.22;
+      sfxGain.gain.value = muted ? 0 : 0.45;
+    }
+    return !muted;
+  }
+
+  // Pentatonic scale for pitch-escalating ricochet pings
+  const PENTATONIC = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25, 783.99, 880.00, 1046.50];
+
+  function playBouncePing(bounceCount) {
+    if (muted || !ctx) return;
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    const idx = Math.min(bounceCount - 1, PENTATONIC.length - 1);
+    const freq = PENTATONIC[Math.max(0, idx + 4)]; // high pleasant bell
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(freq * 1.05, ctx.currentTime + 0.12);
+    
+    g.gain.setValueAtTime(0.35, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+    osc.connect(g);
+    g.connect(sfxGain);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.26);
+  }
+
+  function playParryDeflect() {
+    if (muted || !ctx) return;
+    // Metallic gong + high energy zap
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc1.type = 'sawtooth';
+    osc1.frequency.setValueAtTime(880, ctx.currentTime);
+    osc1.frequency.exponentialRampToValueAtTime(220, ctx.currentTime + 0.35);
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(1760, ctx.currentTime);
+    osc2.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.35);
+
+    g.gain.setValueAtTime(0.6, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.38);
+    osc1.connect(g);
+    osc2.connect(g);
+    g.connect(sfxGain);
+    osc1.start(); osc2.start();
+    osc1.stop(ctx.currentTime + 0.4); osc2.stop(ctx.currentTime + 0.4);
+  }
+
+  function playRecoil() {
+    if (muted || !ctx) return;
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(160, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.18);
+    g.gain.setValueAtTime(0.4, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+    osc.connect(g);
+    g.connect(sfxGain);
+    osc.start(); osc.stop(ctx.currentTime + 0.22);
+  }
+
+  function playShoot() {
+    if (muted || !ctx) return;
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(480, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(120, ctx.currentTime + 0.15);
+    g.gain.setValueAtTime(0.28, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.16);
+    osc.connect(g);
+    g.connect(sfxGain);
+    osc.start(); osc.stop(ctx.currentTime + 0.17);
+  }
+
+  function playExplosion() {
+    if (muted || !ctx) return;
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(130, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.35);
+    g.gain.setValueAtTime(0.5, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.38);
+    osc.connect(g);
+    g.connect(sfxGain);
+    osc.start(); osc.stop(ctx.currentTime + 0.4);
+  }
+
+  function playOverdrive() {
+    if (muted || !ctx) return;
+    const notes = [329.63, 440.00, 523.25, 659.25, 880.00];
+    notes.forEach((f, i) => {
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(f, ctx.currentTime + i * 0.06);
+      g.gain.setValueAtTime(0.25, ctx.currentTime + i * 0.06);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.06 + 0.4);
+      osc.connect(g);
+      g.connect(sfxGain);
+      osc.start(ctx.currentTime + i * 0.06);
+      osc.stop(ctx.currentTime + i * 0.06 + 0.42);
+    });
+  }
+
+  function playShrine() {
+    if (muted || !ctx) return;
+    [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(f, ctx.currentTime + i * 0.08);
+      g.gain.setValueAtTime(0.3, ctx.currentTime + i * 0.08);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.08 + 0.5);
+      osc.connect(g);
+      g.connect(sfxGain);
+      osc.start(ctx.currentTime + i * 0.08);
+      osc.stop(ctx.currentTime + i * 0.08 + 0.52);
+    });
+  }
+
+  function playHurt() {
+    if (muted || !ctx) return;
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(180, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(60, ctx.currentTime + 0.16);
+    g.gain.setValueAtTime(0.4, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
+    osc.connect(g);
+    g.connect(sfxGain);
+    osc.start(); osc.stop(ctx.currentTime + 0.2);
+  }
+
+  // Dark Dream fantasy progression synthesized BGM loop
+  const BGM_NOTES = [
+    220, 261.63, 293.66, 329.63, 220, 261.63, 329.63, 392.0,
+    196, 246.94, 293.66, 349.23, 196, 246.94, 329.63, 293.66,
+    174.61, 220, 261.63, 329.63, 174.61, 220, 293.66, 261.63,
+    164.81, 207.65, 246.94, 329.63, 164.81, 246.94, 329.63, 392.0
+  ];
+  const BASS_NOTES = [110, 110, 98, 98, 87.3, 87.3, 82.4, 82.4];
+
+  function startBGM() {
+    if (bgmPlaying || !ctx) return;
+    bgmPlaying = true;
+    bgmStep = 0;
+    bgmTimer = setInterval(() => {
+      if (muted || !ctx) return;
+      const t = ctx.currentTime;
+      // Arp melody
+      const freq = BGM_NOTES[bgmStep % BGM_NOTES.length];
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, t);
+      g.gain.setValueAtTime(0.12, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+      osc.connect(g);
+      g.connect(musicGain);
+      osc.start(t);
+      osc.stop(t + 0.2);
+
+      // Bass note every 4 steps
+      if (bgmStep % 4 === 0) {
+        const bassFreq = BASS_NOTES[(Math.floor(bgmStep / 4)) % BASS_NOTES.length];
+        const bOsc = ctx.createOscillator();
+        const bG = ctx.createGain();
+        bOsc.type = 'triangle';
+        bOsc.frequency.setValueAtTime(bassFreq, t);
+        bG.gain.setValueAtTime(0.2, t);
+        bG.gain.exponentialRampToValueAtTime(0.001, t + 0.65);
+        bOsc.connect(bG);
+        bG.connect(musicGain);
+        bOsc.start(t);
+        bOsc.stop(t + 0.7);
+      }
+      bgmStep++;
+    }, 180);
+  }
+
+  return {
+    init,
+    toggleMute,
+    playBouncePing,
+    playParryDeflect,
+    playRecoil,
+    playShoot,
+    playExplosion,
+    playOverdrive,
+    playShrine,
+    playHurt
+  };
+})();
+
+// --- GAME ENGINE SETUP ---
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const soundBtn = document.getElementById('sound-btn');
+
+soundBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const unmuted = AudioEngine.toggleMute();
+  soundBtn.textContent = unmuted ? '🔊 AUDIO: ON' : '🔇 AUDIO: MUTED';
+});
+
+window.addEventListener('click', () => AudioEngine.init(), { once: true });
+window.addEventListener('keydown', () => AudioEngine.init(), { once: true });
+
+// Input Manager
+const Input = {
+  keys: {},
+  mouse: { x: 0, y: 0, down: false, rightDown: false },
+  justPressed: {},
+  update() {
+    this.justPressed = {};
+  }
+};
+
+window.addEventListener('keydown', (e) => {
+  const k = e.key.toLowerCase();
+  if (!Input.keys[k]) Input.justPressed[k] = true;
+  Input.keys[k] = true;
+  if ([' ', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(k)) {
+    e.preventDefault();
+  }
+});
+
+window.addEventListener('keyup', (e) => {
+  const k = e.key.toLowerCase();
+  Input.keys[k] = false;
+});
+
+canvas.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  Input.mouse.x = (e.clientX - rect.left) * scaleX;
+  Input.mouse.y = (e.clientY - rect.top) * scaleY;
+});
+
+canvas.addEventListener('mousedown', (e) => {
+  AudioEngine.init();
+  if (e.button === 0) Input.mouse.down = true;
+  if (e.button === 2) {
+    Input.mouse.rightDown = true;
+    Input.justPressed['parry'] = true;
+  }
+});
+
+canvas.addEventListener('mouseup', (e) => {
+  if (e.button === 0) Input.mouse.down = false;
+  if (e.button === 2) Input.mouse.rightDown = false;
+});
+
+canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+
+// --- JUICE & COMBAT FEEDBACK ---
+const Juice = {
+  shakeTimer: 0,
+  shakeIntensity: 0,
+  freezeFrames: 0,
+  floatingTexts: [],
+
+  shake(intensity = 6, duration = 0.25) {
+    this.shakeIntensity = intensity;
+    this.shakeTimer = duration;
+  },
+
+  hitStop(frames = 3) {
+    this.freezeFrames = Math.max(this.freezeFrames, frames);
+  },
+
+  addText(text, x, y, color = '#ffd700', size = 16) {
+    this.floatingTexts.push({
+      text, x, y, color, size,
+      vy: -1.8,
+      life: 1.0,
+      scale: 1.5
+    });
+  },
+
+  update(dt) {
+    if (this.shakeTimer > 0) this.shakeTimer -= dt;
+    this.floatingTexts.forEach(t => {
+      t.y += t.vy;
+      t.life -= dt * 1.5;
+      if (t.scale > 1.0) t.scale = Math.max(1.0, t.scale - dt * 3.5);
+    });
+    this.floatingTexts = this.floatingTexts.filter(t => t.life > 0);
+  },
+
+  render(ctx) {
+    ctx.save();
+    this.floatingTexts.forEach(t => {
+      ctx.globalAlpha = Math.max(0, t.life);
+      ctx.fillStyle = t.color;
+      ctx.font = `bold ${Math.round(t.size * t.scale)}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.shadowColor = '#000';
+      ctx.shadowBlur = 6;
+      ctx.fillText(t.text, t.x, t.y);
+    });
+    ctx.restore();
+  }
+};
+
+// --- PARTICLES ENGINE ---
+class ParticleSystem {
+  constructor() {
+    this.particles = [];
+  }
+  emit(x, y, count = 5, color = '#ff9900', speed = 2, size = 3, life = 0.4) {
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const spd = (Math.random() * 0.7 + 0.3) * speed;
+      this.particles.push({
+        x, y,
+        vx: Math.cos(angle) * spd,
+        vy: Math.sin(angle) * spd,
+        color,
+        size: Math.random() * size + 1.5,
+        life: 1.0,
+        decay: 1.0 / (Math.random() * life + 0.15)
+      });
+    }
+  }
+  emitRing(x, y, color = '#00f0ff', maxR = 30) {
+    this.particles.push({
+      x, y, isRing: true,
+      r: 4, maxR,
+      color, life: 1.0, decay: 3.5
+    });
+  }
+  update(dt) {
+    this.particles.forEach(p => {
+      if (p.isRing) {
+        p.r += (p.maxR - p.r) * dt * 12;
+        p.life -= p.decay * dt;
+      } else {
+        p.x += p.vx * 60 * dt;
+        p.y += p.vy * 60 * dt;
+        p.life -= p.decay * dt;
+      }
+    });
+    this.particles = this.particles.filter(p => p.life > 0);
+  }
+  render(ctx) {
+    ctx.save();
+    this.particles.forEach(p => {
+      ctx.globalAlpha = Math.max(0, p.life);
+      if (p.isRing) {
+        ctx.strokeStyle = p.color;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.stroke();
+      } else {
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+    ctx.restore();
+  }
+}
+const FX = new ParticleSystem();
+
+// --- TILEMAP & LEVEL GENERATION ---
+const TILE_SIZE = 32;
+const MAP_W = 100;
+const MAP_H = 20;
+
+class LevelMap {
+  constructor(levelNum) {
+    this.levelNum = levelNum;
+    this.grid = new Uint8Array(MAP_W * MAP_H);
+    this.shrines = [];
+    this.crystals = [];
+    this.checkpoints = [];
+    this.movingPlatforms = [];
+    this.buildLevel(levelNum);
+  }
+
+  get(x, y) {
+    if (x < 0 || x >= MAP_W || y < 0 || y >= MAP_H) return 1; // solid boundaries
+    return this.grid[y * MAP_W + x];
+  }
+
+  set(x, y, val) {
+    if (x >= 0 && x < MAP_W && y >= 0 && y < MAP_H) {
+      this.grid[y * MAP_W + x] = val;
+    }
+  }
+
+  buildLevel(lvl) {
+    this.grid.fill(0);
+    // Boundary floors and ceilings
+    for (let x = 0; x < MAP_W; x++) {
+      this.set(x, 0, 1);
+      this.set(x, MAP_H - 1, 1);
+    }
+    for (let y = 0; y < MAP_H; y++) {
+      this.set(0, y, 1);
+      this.set(MAP_W - 1, y, 1);
+    }
+
+    // Floor structure with intentional bounce gaps and high ceilings
+    for (let x = 0; x < MAP_W; x++) {
+      const isPit = (x > 18 && x < 24) || (x > 45 && x < 52) || (x > 75 && x < 82);
+      if (!isPit) {
+        this.set(x, 15, 1);
+        this.set(x, 16, 1);
+      } else {
+        // Lava / void bottom hazard
+        this.set(x, 18, 2); // 2 = hazard
+      }
+    }
+
+    // Terraced platforms, angled ricochet walls, and floating roofs
+    const addPlatform = (x1, x2, y) => {
+      for (let x = x1; x <= x2; x++) this.set(x, y, 1);
+    };
+
+    // Level 1 platforms
+    addPlatform(6, 12, 11);
+    addPlatform(14, 18, 8);
+    addPlatform(26, 34, 11);
+    addPlatform(36, 42, 8);
+    addPlatform(40, 46, 12);
+    addPlatform(54, 62, 11);
+    addPlatform(64, 72, 8);
+    addPlatform(84, 96, 14); // Boss floor
+
+    // Wall pillars for ricochet bounces
+    for (let y = 5; y <= 12; y++) {
+      this.set(20, y, 1);
+      this.set(48, y, 1);
+      this.set(76, y, 1);
+    }
+
+    // Ruined Shrines that "BOUNCE BACK" to life on trick-shots!
+    this.shrines = [
+      { x: 16 * TILE_SIZE, y: 7 * TILE_SIZE, active: false, stat: '+25 MAX HP & HEAL' },
+      { x: 39 * TILE_SIZE, y: 7 * TILE_SIZE, active: false, stat: '+15% MOVE SPEED' },
+      { x: 68 * TILE_SIZE, y: 7 * TILE_SIZE, active: false, stat: '+20% REBOUND GENERATION' }
+    ];
+
+    // Checkpoints
+    this.checkpoints = [
+      { x: 4 * TILE_SIZE, y: 14 * TILE_SIZE, active: true },
+      { x: 30 * TILE_SIZE, y: 14 * TILE_SIZE, active: false },
+      { x: 58 * TILE_SIZE, y: 14 * TILE_SIZE, active: false }
+    ];
+
+    // Collectible Crystals
+    for (let x = 8; x < 90; x += 4) {
+      if (Math.random() < 0.6) {
+        this.crystals.push({
+          x: x * TILE_SIZE + 16,
+          y: (Math.random() < 0.5 ? 9 : 13) * TILE_SIZE + 16,
+          collected: false
+        });
+      }
+    }
+
+    // Moving Platforms across pits
+    this.movingPlatforms = [
+      { x: 20 * TILE_SIZE, y: 13 * TILE_SIZE, minX: 19 * TILE_SIZE, maxX: 24 * TILE_SIZE, vx: 50, w: 64, h: 14 },
+      { x: 47 * TILE_SIZE, y: 13 * TILE_SIZE, minX: 46 * TILE_SIZE, maxX: 52 * TILE_SIZE, vx: 60, w: 64, h: 14 },
+      { x: 77 * TILE_SIZE, y: 13 * TILE_SIZE, minX: 76 * TILE_SIZE, maxX: 82 * TILE_SIZE, vx: 70, w: 64, h: 14 }
+    ];
+  }
+}
+
+// --- PROJECTILE RICOCHET & DEFLECTION SYSTEM ---
+class Projectile {
+  constructor(x, y, vx, vy, isPlayer = true, options = {}) {
+    this.x = x;
+    this.y = y;
+    this.vx = vx;
+    this.vy = vy;
+    this.isPlayer = isPlayer;
+    this.radius = options.radius || 7;
+    this.baseDamage = options.damage || 35;
+    this.bounces = 0;
+    this.maxBounces = options.maxBounces || 3;
+    this.isDeflected = options.isDeflected || false;
+    this.isOverdrive = options.isOverdrive || false;
+    this.life = options.life || 4.5;
+    this.trail = [];
+  }
+
+  get damage() {
+    // Each bounce multiplies damage: 1x -> 2x -> 3x (or up to 5x)
+    const multiplier = this.isDeflected ? 3.0 : (1.0 + this.bounces);
+    return Math.round(this.baseDamage * multiplier);
+  }
+
+  getColor() {
+    if (this.isOverdrive) return '#ffe600';
+    if (this.isDeflected) return '#00ffff';
+    if (!this.isPlayer) return '#ff2255';
+    // Shift glow color based on consecutive bounces
+    switch (this.bounces) {
+      case 0: return '#ff6600'; // Fireball Orange
+      case 1: return '#00e5ff'; // Kinetic Cyan (2x)
+      case 2: return '#e033ff'; // Radiant Magenta (3x)
+      default: return '#ffd700'; // Golden Overdrive (4x+)
+    }
+  }
+
+  update(dt, map, enemies, player) {
+    this.life -= dt;
+    if (this.life <= 0) return false;
+
+    // Trail recording
+    this.trail.push({ x: this.x, y: this.y, color: this.getColor() });
+    if (this.trail.length > 8) this.trail.shift();
+
+    // Step physics & Raycast bounce against tiles
+    const nextX = this.x + this.vx * dt;
+    const nextY = this.y + this.vy * dt;
+
+    // Check collision with tilemap (horizontal and vertical checks for exact normal)
+    const tileX = Math.floor(nextX / TILE_SIZE);
+    const tileY = Math.floor(nextY / TILE_SIZE);
+    const curTileX = Math.floor(this.x / TILE_SIZE);
+    const curTileY = Math.floor(this.y / TILE_SIZE);
+
+    let collided = false;
+    let normalX = 0;
+    let normalY = 0;
+
+    if (map.get(tileX, curTileY) === 1) {
+      collided = true;
+      normalX = this.vx > 0 ? -1 : 1;
+    }
+    if (map.get(curTileX, tileY) === 1) {
+      collided = true;
+      normalY = this.vy > 0 ? -1 : 1;
+    }
+    if (!collided && map.get(tileX, tileY) === 1) {
+      collided = true;
+      normalX = this.vx > 0 ? -1 : 1;
+      normalY = this.vy > 0 ? -1 : 1;
+    }
+
+    if (collided) {
+      if (this.isPlayer && this.bounces < this.maxBounces) {
+        // RICOCHET BOUNCE!
+        this.bounces++;
+        if (normalX !== 0) this.vx = -this.vx * 1.15; // +15% speed per bounce
+        if (normalY !== 0) this.vy = -this.vy * 1.15;
+        this.x += this.vx * dt * 1.2;
+        this.y += this.vy * dt * 1.2;
+
+        AudioEngine.playBouncePing(this.bounces);
+        Juice.shake(3, 0.12);
+        FX.emit(this.x, this.y, 8, this.getColor(), 3, 3, 0.3);
+        FX.emitRing(this.x, this.y, this.getColor(), 24);
+
+        const comboText = `${this.bounces + 1}x BOUNCE!`;
+        Juice.addText(comboText, this.x, this.y - 12, this.getColor(), 14 + this.bounces * 2);
+
+        // Check if ricochet hits Ruined Shrines!
+        map.shrines.forEach(s => {
+          if (!s.active && Math.hypot(this.x - (s.x + 16), this.y - (s.y + 16)) < 26) {
+            s.active = true;
+            AudioEngine.playShrine();
+            Juice.shake(7, 0.35);
+            Juice.addText(`SHRINE RESTORED! ${s.stat}`, s.x + 16, s.y - 20, '#00ffff', 18);
+            player.applyShrineBuff(s);
+          }
+        });
+
+      } else {
+        // Out of bounces or enemy projectile hitting wall
+        FX.emit(this.x, this.y, 10, this.getColor(), 2.5);
+        return false;
+      }
+    } else {
+      this.x = nextX;
+      this.y = nextY;
+    }
+
+    // Combat Collisions:
+    if (this.isPlayer || this.isDeflected) {
+      for (let enemy of enemies) {
+        if (!enemy.dead && Math.hypot(this.x - enemy.x, this.y - enemy.y) < enemy.radius + this.radius) {
+          enemy.takeDamage(this.damage, this.bounces);
+          FX.emit(this.x, this.y, 14, this.getColor(), 4, 4);
+          Juice.shake(4 + this.bounces * 2, 0.2);
+          Juice.addText(`${this.damage}`, enemy.x, enemy.y - 16, this.getColor(), 16 + this.bounces * 3);
+          return false;
+        }
+      }
+    } else {
+      // Enemy projectile -> Player check
+      const dist = Math.hypot(this.x - player.x, this.y - player.y);
+
+      // PARRIED / DEFLECTED by Player Shield
+      if (player.isParrying && dist < player.radius + this.radius + 20) {
+        this.isDeflected = true;
+        this.isPlayer = true;
+        this.vx = -this.vx * 3.0; // 3x velocity reverse!
+        this.vy = -this.vy * 3.0;
+        this.bounces = 2; // immediate high multiplier
+        AudioEngine.playParryDeflect();
+        Juice.hitStop(5); // 5-frame freeze frame
+        Juice.shake(8, 0.3);
+        FX.emitRing(player.x, player.y, '#00ffff', 48);
+        Juice.addText('DEFLECTED 3x!', player.x, player.y - 28, '#00ffff', 22);
+        player.addRebound(35);
+        return true;
+      }
+
+      // Near-Miss Rebound Reward (passed close without hitting)
+      if (!this.nearMissRecorded && dist > player.radius + this.radius && dist < player.radius + 38) {
+        this.nearMissRecorded = true;
+        player.addRebound(12);
+        Juice.addText('NEAR MISS! +12% REBOUND', player.x, player.y - 20, '#ffd700', 13);
+      }
+
+      // Hit Player
+      if (dist < player.radius + this.radius) {
+        player.takeDamage(this.damage);
+        FX.emit(this.x, this.y, 12, '#ff0044', 3);
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  render(ctx) {
+    ctx.save();
+    // Glowing trail ribbon
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = this.getColor();
+    ctx.beginPath();
+    this.trail.forEach((p, i) => {
+      if (i === 0) ctx.moveTo(p.x, p.y);
+      else ctx.lineTo(p.x, p.y);
+    });
+    ctx.stroke();
+
+    // Projectile Core
+    ctx.fillStyle = '#ffffff';
+    ctx.shadowColor = this.getColor();
+    ctx.shadowBlur = 12 + this.bounces * 4;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Outer Aura Ring
+    ctx.strokeStyle = this.getColor();
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius + 3, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+// --- PLAYER CHARACTER WITH RECOIL & REBOUND ---
+class Player {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.vx = 0;
+    this.vy = 0;
+    this.radius = 14;
+    this.width = 24;
+    this.height = 36;
+
+    // Health & Mana stats
+    this.maxHp = 250;
+    this.hp = 250;
+    this.maxMp = 200;
+    this.mp = 200;
+
+    // Movement constants
+    this.speed = 220;
+    this.jumpForce = -420;
+    this.gravity = 1100;
+    this.grounded = false;
+
+    // REBOUND METER SYSTEM (0 to 100%)
+    this.reboundMeter = 0;
+    this.isOverdrive = false;
+    this.overdriveTimer = 0;
+
+    // Combat timers
+    this.shootCooldown = 0;
+    this.parryCooldown = 0;
+    this.isParrying = false;
+    this.parryTimer = 0;
+    this.invulnTimer = 0;
+
+    // Stats buffs from restored shrines
+    this.speedMultiplier = 1.0;
+    this.reboundMultiplier = 1.0;
+  }
+
+  addRebound(amount) {
+    if (this.isOverdrive) return;
+    this.reboundMeter = Math.min(100, this.reboundMeter + amount * this.reboundMultiplier);
+    if (this.reboundMeter >= 100) {
+      Juice.addText('REBOUND READY! PRESS [Q]', this.x, this.y - 34, '#ffd700', 16);
+    }
+  }
+
+  triggerOverdrive() {
+    if (this.reboundMeter < 100 || this.isOverdrive) return;
+    this.reboundMeter = 0;
+    this.isOverdrive = true;
+    this.overdriveTimer = 5.0; // 5-second frenzy
+    AudioEngine.playOverdrive();
+    Juice.shake(10, 0.45);
+    Juice.hitStop(6);
+    Juice.addText('REBOUND OVERDRIVE ACTIVATED!', this.x, this.y - 40, '#ffd700', 24);
+
+    // Radial shockwave knocks back & damages all nearby enemies
+    Game.enemies.forEach(e => {
+      const d = Math.hypot(e.x - this.x, e.y - this.y);
+      if (d < 180) {
+        e.takeDamage(60, 3);
+        const kx = (e.x - this.x) / d;
+        const ky = (e.y - this.y) / d;
+        e.vx = kx * 320;
+        e.vy = ky * 240;
+      }
+    });
+    FX.emitRing(this.x, this.y, '#ffd700', 180);
+    FX.emit(this.x, this.y, 30, '#ffd700', 5, 5, 0.6);
+  }
+
+  applyShrineBuff(shrine) {
+    if (shrine.stat.includes('HP')) {
+      this.maxHp += 25;
+      this.hp = Math.min(this.maxHp, this.hp + 60);
+    } else if (shrine.stat.includes('SPEED')) {
+      this.speedMultiplier += 0.20;
+    } else if (shrine.stat.includes('REBOUND')) {
+      this.reboundMultiplier += 0.35;
+    }
+  }
+
+  shoot(targetX, targetY) {
+    if (this.shootCooldown > 0) return;
+    const fireRate = this.isOverdrive ? 0.12 : 0.28;
+    this.shootCooldown = fireRate;
+
+    const angle = Math.atan2(targetY - this.y, targetX - this.x);
+    const speed = this.isOverdrive ? 650 : 500;
+    const vx = Math.cos(angle) * speed;
+    const vy = Math.sin(angle) * speed;
+
+    // MAGICAL RECOIL IMPULSE (Platforming & Rocket-Jumping!)
+    // Pushes the player in the opposite direction of the shot
+    const recoilStrength = this.isOverdrive ? 360 : 260;
+    this.vx -= Math.cos(angle) * recoilStrength * 0.75;
+    this.vy -= Math.sin(angle) * recoilStrength;
+    AudioEngine.playRecoil();
+    AudioEngine.playShoot();
+    Juice.shake(2, 0.08);
+
+    // Spawn Projectile
+    const maxBounces = this.isOverdrive ? 5 : 3;
+    const p = new Projectile(this.x, this.y, vx, vy, true, {
+      maxBounces,
+      isOverdrive: this.isOverdrive,
+      damage: this.isOverdrive ? 55 : 35
+    });
+    Game.projectiles.push(p);
+
+    // Backfire dust particles
+    FX.emit(this.x, this.y, 6, '#ffaa00', 3, 2, 0.25);
+  }
+
+  parry() {
+    if (this.parryCooldown > 0) return;
+    this.parryCooldown = 0.8;
+    this.isParrying = true;
+    this.parryTimer = 0.35; // 0.35s deflection window
+    AudioEngine.playShoot();
+    FX.emitRing(this.x, this.y, '#00ffff', 36);
+  }
+
+  takeDamage(amount) {
+    if (this.invulnTimer > 0) return;
+    if (this.isParrying) return; // negated by parry
+
+    this.hp -= amount;
+    this.invulnTimer = 0.8;
+    this.addRebound(25); // Taking damage directly fuels the Rebound meter!
+    AudioEngine.playHurt();
+    Juice.shake(7, 0.25);
+    Juice.addText(`-${amount}`, this.x, this.y - 18, '#ff3344', 18);
+
+    if (this.hp <= 0) {
+      Game.triggerGameOver();
+    }
+  }
+
+  update(dt, map) {
+    // Overdrive countdown
+    if (this.isOverdrive) {
+      this.overdriveTimer -= dt;
+      if (this.overdriveTimer <= 0) {
+        this.isOverdrive = false;
+      }
+      FX.emit(this.x + (Math.random() - 0.5) * 16, this.y + (Math.random() - 0.5) * 24, 2, '#ffd700', 1.5, 2, 0.2);
+    }
+
+    if (this.shootCooldown > 0) this.shootCooldown -= dt;
+    if (this.parryCooldown > 0) this.parryCooldown -= dt;
+    if (this.invulnTimer > 0) this.invulnTimer -= dt;
+
+    if (this.parryTimer > 0) {
+      this.parryTimer -= dt;
+      if (this.parryTimer <= 0) this.isParrying = false;
+    }
+
+    // Horizontal controls
+    let moveDir = 0;
+    if (Input.keys['a'] || Input.keys['arrowleft']) moveDir -= 1;
+    if (Input.keys['d'] || Input.keys['arrowright']) moveDir += 1;
+
+    const targetVx = moveDir * this.speed * this.speedMultiplier;
+    this.vx += (targetVx - this.vx) * dt * 14;
+
+    // Jump
+    if ((Input.justPressed[' '] || Input.justPressed['w'] || Input.justPressed['arrowup']) && this.grounded) {
+      this.vy = this.jumpForce;
+      this.grounded = false;
+      AudioEngine.playRecoil();
+    }
+
+    // Fire & Recoil on Left-Click or J
+    if (Input.mouse.down || Input.keys['j']) {
+      this.shoot(Input.mouse.x + Game.cameraX, Input.mouse.y);
+    }
+
+    // Parry / Deflect on Right-Click or I / Shift
+    if (Input.justPressed['parry'] || Input.justPressed['i'] || Input.justPressed['shift']) {
+      this.parry();
+    }
+
+    // Rebound Trigger on Q
+    if (Input.justPressed['q']) {
+      this.triggerOverdrive();
+    }
+
+    // Gravity
+    this.vy += this.gravity * dt;
+
+    // Tile Collisions
+    this.moveAndCollide(dt, map);
+
+    // Hazard bottom check
+    if (this.y > (MAP_H - 1) * TILE_SIZE) {
+      this.takeDamage(50);
+      this.respawnAtCheckpoint();
+    }
+  }
+
+  moveAndCollide(dt, map) {
+    // Horizontal step
+    this.x += this.vx * dt;
+    const tileLeft = Math.floor((this.x - this.radius) / TILE_SIZE);
+    const tileRight = Math.floor((this.x + this.radius) / TILE_SIZE);
+    const tileTop = Math.floor((this.y - this.height / 2) / TILE_SIZE);
+    const tileBottom = Math.floor((this.y + this.height / 2 - 2) / TILE_SIZE);
+
+    for (let ty = tileTop; ty <= tileBottom; ty++) {
+      if (map.get(tileLeft, ty) === 1) {
+        this.x = (tileLeft + 1) * TILE_SIZE + this.radius;
+        this.vx = 0;
+        break;
+      }
+      if (map.get(tileRight, ty) === 1) {
+        this.x = tileRight * TILE_SIZE - this.radius;
+        this.vx = 0;
+        break;
+      }
+    }
+
+    // Vertical step
+    this.grounded = false;
+    this.y += this.vy * dt;
+    const newTileLeft = Math.floor((this.x - this.radius) / TILE_SIZE);
+    const newTileRight = Math.floor((this.x + this.radius) / TILE_SIZE);
+    const newTileTop = Math.floor((this.y - this.height / 2) / TILE_SIZE);
+    const newTileBottom = Math.floor((this.y + this.height / 2) / TILE_SIZE);
+
+    for (let tx = newTileLeft; tx <= newTileRight; tx++) {
+      if (map.get(tx, newTileTop) === 1 && this.vy < 0) {
+        this.y = (newTileTop + 1) * TILE_SIZE + this.height / 2;
+        this.vy = 0;
+        break;
+      }
+      if (map.get(tx, newTileBottom) === 1 && this.vy > 0) {
+        this.y = newTileBottom * TILE_SIZE - this.height / 2;
+        this.vy = 0;
+        this.grounded = true;
+        break;
+      }
+    }
+
+    // Moving platforms collision
+    map.movingPlatforms.forEach(p => {
+      p.x += p.vx * dt;
+      if (p.x < p.minX || p.x > p.maxX) p.vx *= -1;
+      if (this.vy >= 0 &&
+          this.x >= p.x && this.x <= p.x + p.w &&
+          this.y + this.height / 2 >= p.y && this.y + this.height / 2 <= p.y + 12) {
+        this.y = p.y - this.height / 2;
+        this.vy = 0;
+        this.grounded = true;
+        this.x += p.vx * dt;
+      }
+    });
+
+    // Checkpoints trigger
+    map.checkpoints.forEach(cp => {
+      if (!cp.active && Math.hypot(this.x - cp.x, this.y - cp.y) < 32) {
+        map.checkpoints.forEach(c => c.active = false);
+        cp.active = true;
+        Game.activeCheckpoint = { x: cp.x, y: cp.y };
+        AudioEngine.playShrine();
+        Juice.addText('CHECKPOINT ACTIVATED!', cp.x, cp.y - 24, '#00ffcc', 16);
+      }
+    });
+
+    // Crystals pickup
+    map.crystals.forEach(c => {
+      if (!c.collected && Math.hypot(this.x - c.x, this.y - c.y) < 20) {
+        c.collected = true;
+        Game.crystals++;
+        this.addRebound(5);
+        AudioEngine.playBouncePing(4);
+        Juice.addText('+1 CRYSTAL', c.x, c.y - 12, '#66ffff', 12);
+      }
+    });
+  }
+
+  respawnAtCheckpoint() {
+    this.hp = this.maxHp;
+    this.mp = this.maxMp;
+    this.vx = 0;
+    this.vy = 0;
+    this.x = Game.activeCheckpoint.x;
+    this.y = Game.activeCheckpoint.y;
+    this.invulnTimer = 2.0;
+    Juice.addText('RESPAWNED!', this.x, this.y - 30, '#00ff88', 18);
+  }
+
+  render(ctx) {
+    ctx.save();
+    if (this.invulnTimer > 0 && Math.floor(Date.now() / 80) % 2 === 0) {
+      ctx.globalAlpha = 0.4;
+    }
+
+    // Overdrive Glowing Aura
+    if (this.isOverdrive) {
+      ctx.fillStyle = 'rgba(255, 215, 0, 0.25)';
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, 28, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Parry Shield Bubble
+    if (this.isParrying) {
+      ctx.strokeStyle = '#00ffff';
+      ctx.lineWidth = 3;
+      ctx.shadowColor = '#00ffff';
+      ctx.shadowBlur = 15;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, 30, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // Wizard Body Drawing (Pixel-art fantasy silhouette)
+    // Robe
+    ctx.fillStyle = this.isOverdrive ? '#ffea00' : '#4b2d82';
+    ctx.beginPath();
+    ctx.moveTo(this.x - 10, this.y + 16);
+    ctx.lineTo(this.x + 10, this.y + 16);
+    ctx.lineTo(this.x + 6, this.y - 6);
+    ctx.lineTo(this.x - 6, this.y - 6);
+    ctx.closePath();
+    ctx.fill();
+
+    // Wizard Hat
+    ctx.fillStyle = this.isOverdrive ? '#ff9900' : '#2d1848';
+    ctx.beginPath();
+    ctx.moveTo(this.x - 12, this.y - 6);
+    ctx.lineTo(this.x + 12, this.y - 6);
+    ctx.lineTo(this.x, this.y - 24);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#ffd700'; // Hat buckle
+    ctx.fillRect(this.x - 3, this.y - 8, 6, 3);
+
+    // Glowing Magic Staff
+    const aimAngle = Math.atan2(Input.mouse.y - (this.y - 2), (Input.mouse.x + Game.cameraX) - this.x);
+    const staffEndX = this.x + Math.cos(aimAngle) * 22;
+    const staffEndY = this.y + Math.sin(aimAngle) * 22;
+    ctx.strokeStyle = '#8b5a2b';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(this.x, this.y + 2);
+    ctx.lineTo(staffEndX, staffEndY);
+    ctx.stroke();
+
+    // Staff Gem
+    ctx.fillStyle = this.isOverdrive ? '#ffe600' : (this.reboundMeter >= 100 ? '#ff00ff' : '#00f0ff');
+    ctx.shadowColor = ctx.fillStyle;
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.arc(staffEndX, staffEndY, 5, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  }
+}
+
+// --- ENEMIES & BOSSES ---
+class Enemy {
+  constructor(x, y, type = 'shadow', isBoss = false) {
+    this.x = x;
+    this.y = y;
+    this.vx = 0;
+    this.vy = 0;
+    this.type = type;
+    this.isBoss = isBoss;
+    this.radius = isBoss ? 28 : 15;
+    this.maxHp = isBoss ? 600 : (type === 'demon' ? 120 : 65);
+    this.hp = this.maxHp;
+    this.dead = false;
+    this.shootTimer = Math.random() * 2.0;
+  }
+
+  takeDamage(amt) {
+    this.hp -= amt;
+    AudioEngine.playHurt();
+    if (this.hp <= 0) {
+      this.dead = true;
+      AudioEngine.playExplosion();
+      FX.emit(this.x, this.y, 20, '#ff4400', 4, 4, 0.5);
+      if (this.isBoss) {
+        Game.triggerVictory();
+      }
+    }
+  }
+
+  update(dt, player) {
+    if (this.dead) return;
+    const distToPlayer = Math.hypot(player.x - this.x, player.y - this.y);
+
+    if (this.type === 'bat') {
+      // Flying swooper
+      if (distToPlayer < 240) {
+        const angle = Math.atan2(player.y - this.y, player.x - this.x);
+        this.x += Math.cos(angle) * 110 * dt;
+        this.y += Math.sin(angle) * 110 * dt;
+      }
+    } else if (this.type === 'demon') {
+      // Ranged caster
+      this.shootTimer -= dt;
+      if (distToPlayer < 320 && this.shootTimer <= 0) {
+        this.shootTimer = 2.4;
+        const angle = Math.atan2(player.y - this.y, player.x - this.x);
+        const p = new Projectile(this.x, this.y, Math.cos(angle) * 220, Math.sin(angle) * 220, false, {
+          damage: 25, radius: 7
+        });
+        Game.projectiles.push(p);
+      }
+    } else if (this.isBoss) {
+      // BOSS: The Abyssal Void Overlord
+      this.shootTimer -= dt;
+      if (this.shootTimer <= 0) {
+        this.shootTimer = 1.8;
+        // Radial 3-orb burst (can be deflected back!)
+        for (let i = -1; i <= 1; i++) {
+          const baseAngle = Math.atan2(player.y - this.y, player.x - this.x);
+          const angle = baseAngle + i * 0.28;
+          const p = new Projectile(this.x, this.y, Math.cos(angle) * 240, Math.sin(angle) * 240, false, {
+            damage: 35, radius: 9
+          });
+          Game.projectiles.push(p);
+        }
+      }
+    }
+  }
+
+  render(ctx) {
+    if (this.dead) return;
+    ctx.save();
+    if (this.isBoss) {
+      // Grand Abyssal Boss
+      ctx.fillStyle = '#220833';
+      ctx.shadowColor = '#9900ff';
+      ctx.shadowBlur = 18;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fill();
+      // Glowing Horns & Eye
+      ctx.fillStyle = '#ff0055';
+      ctx.beginPath();
+      ctx.arc(this.x - 8, this.y - 4, 4, 0, Math.PI * 2);
+      ctx.arc(this.x + 8, this.y - 4, 4, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (this.type === 'bat') {
+      ctx.fillStyle = '#6b2d82';
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      ctx.fillStyle = '#ff3300';
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+}
+
+// --- MAIN GAME MANAGER & SCENES ---
+const Game = {
+  state: 'intro', // 'intro', 'playing', 'gameover', 'victory', 'paused'
+  introTimer: 3.5,
+  cameraX: 0,
+  crystals: 0,
+  activeCheckpoint: { x: 4 * TILE_SIZE, y: 14 * TILE_SIZE },
+  map: null,
+  player: null,
+  enemies: [],
+  projectiles: [],
+
+  init() {
+    this.map = new LevelMap(1);
+    this.player = new Player(4 * TILE_SIZE, 14 * TILE_SIZE);
+    this.projectiles = [];
+    this.enemies = [
+      new Enemy(18 * TILE_SIZE, 14 * TILE_SIZE, 'shadow'),
+      new Enemy(28 * TILE_SIZE, 7 * TILE_SIZE, 'bat'),
+      new Enemy(38 * TILE_SIZE, 14 * TILE_SIZE, 'demon'),
+      new Enemy(56 * TILE_SIZE, 10 * TILE_SIZE, 'bat'),
+      new Enemy(66 * TILE_SIZE, 14 * TILE_SIZE, 'demon'),
+      new Enemy(90 * TILE_SIZE, 13 * TILE_SIZE, 'boss', true) // Boss!
+    ];
+    this.state = 'intro';
+    this.introTimer = 3.5;
+  },
+
+  triggerGameOver() {
+    this.state = 'gameover';
+  },
+
+  triggerVictory() {
+    this.state = 'victory';
+    AudioEngine.playShrine();
+  },
+
+  update(dt) {
+    if (this.state === 'intro') {
+      this.introTimer -= dt;
+      if (this.introTimer <= 0) {
+        this.state = 'playing';
+      }
+      return;
+    }
+
+    if (this.state !== 'playing') {
+      if (Input.justPressed['r']) {
+        this.init();
+        this.state = 'playing';
+      }
+      return;
+    }
+
+    if (Input.justPressed['escape'] || Input.justPressed['p']) {
+      this.state = 'paused';
+      return;
+    }
+
+    // Hit-stop freeze frames
+    if (Juice.freezeFrames > 0) {
+      Juice.freezeFrames--;
+      return;
+    }
+
+    // Update Player & Entities
+    this.player.update(dt, this.map);
+
+    this.projectiles = this.projectiles.filter(p => p.update(dt, this.map, this.enemies, this.player));
+    this.enemies.forEach(e => e.update(dt, this.player));
+    FX.update(dt);
+    Juice.update(dt);
+
+    // Smooth Camera Follow
+    const targetCamX = this.player.x - canvas.width * 0.45;
+    this.cameraX += (targetCamX - this.cameraX) * dt * 6;
+    this.cameraX = Math.max(0, Math.min((MAP_W * TILE_SIZE) - canvas.width, this.cameraX));
+
+    Input.update();
+  },
+
+  render() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.save();
+    // Screen Shake Offset
+    if (Juice.shakeTimer > 0) {
+      const sx = (Math.random() - 0.5) * Juice.shakeIntensity;
+      const sy = (Math.random() - 0.5) * Juice.shakeIntensity;
+      ctx.translate(sx, sy);
+    }
+
+    // Parallax Starry Background
+    ctx.fillStyle = '#0a0815';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < 40; i++) {
+      const bx = ((i * 47) - this.cameraX * 0.15) % canvas.width;
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.fillRect((bx < 0 ? bx + canvas.width : bx), (i * 23) % canvas.height, 2, 2);
+    }
+
+    // Translate for World Coordinates
+    ctx.save();
+    ctx.translate(-this.cameraX, 0);
+
+    // Render Tiles
+    for (let x = 0; x < MAP_W; x++) {
+      for (let y = 0; y < MAP_H; y++) {
+        const t = this.map.get(x, y);
+        if (t === 1) {
+          ctx.fillStyle = '#2b2345';
+          ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+          // Highlight edge
+          ctx.fillStyle = '#5c4b8b';
+          ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, 3);
+        } else if (t === 2) {
+          // Hazard lava/void
+          ctx.fillStyle = '#ff2200';
+          ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE + 8, TILE_SIZE, TILE_SIZE - 8);
+        }
+      }
+    }
+
+    // Render Moving Platforms
+    this.map.movingPlatforms.forEach(p => {
+      ctx.fillStyle = '#4287f5';
+      ctx.fillRect(p.x, p.y, p.w, p.h);
+      ctx.fillStyle = '#99ccff';
+      ctx.fillRect(p.x, p.y, p.w, 3);
+    });
+
+    // Render Ruined Shrines (Dark until hit by a ricochet!)
+    this.map.shrines.forEach(s => {
+      ctx.fillStyle = s.active ? '#00ffcc' : '#443c55';
+      ctx.shadowColor = s.active ? '#00ffcc' : 'transparent';
+      ctx.shadowBlur = s.active ? 15 : 0;
+      ctx.fillRect(s.x, s.y + 4, 32, 28);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(s.active ? '✦' : '✧', s.x + 12, s.y + 22);
+    });
+
+    // Render Crystals
+    this.map.crystals.forEach(c => {
+      if (!c.collected) {
+        ctx.fillStyle = '#00f0ff';
+        ctx.shadowColor = '#00f0ff';
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, 6, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+
+    // Render Entities & Particles
+    this.player.render(ctx);
+    this.enemies.forEach(e => e.render(ctx));
+    this.projectiles.forEach(p => p.render(ctx));
+    FX.render(ctx);
+
+    ctx.restore(); // end camera
+
+    // Render Juiced Floating Combo Text in Screen Space
+    ctx.save();
+    ctx.translate(-this.cameraX, 0);
+    Juice.render(ctx);
+    ctx.restore();
+
+    ctx.restore(); // end screen shake
+
+    // --- HUD & MENUS RENDERING ---
+    this.renderHUD();
+
+    // Intro Overlay Sequence: "FROM ASHES TO POWER"
+    if (this.state === 'intro') {
+      ctx.fillStyle = 'rgba(10, 6, 18, 0.88)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#ffd700';
+      ctx.font = 'bold 34px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('FROM ASHES TO POWER', canvas.width / 2, 210);
+      ctx.fillStyle = '#fff';
+      ctx.font = '16px sans-serif';
+      ctx.fillText('The Void Overlord has shattered your Legendary Staff and cast you into the abyss.', canvas.width / 2, 255);
+      ctx.fillStyle = '#00f0ff';
+      ctx.fillText('Use WALL RICOCHETS and MAGICAL RECOIL to BOUNCE BACK to glory!', canvas.width / 2, 290);
+    } else if (this.state === 'gameover') {
+      ctx.fillStyle = 'rgba(25, 5, 10, 0.85)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#ff2244';
+      ctx.font = 'bold 40px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('YOU FELL IN THE ABYSS', canvas.width / 2, 240);
+      ctx.fillStyle = '#ffd700';
+      ctx.font = '18px sans-serif';
+      ctx.fillText('Press [R] to BOUNCE BACK from Checkpoint!', canvas.width / 2, 285);
+    } else if (this.state === 'victory') {
+      ctx.fillStyle = 'rgba(5, 20, 25, 0.85)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#00ffcc';
+      ctx.font = 'bold 44px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('VICTORY: THE MYSTERIES RECLAIMED!', canvas.width / 2, 230);
+      ctx.fillStyle = '#ffd700';
+      ctx.font = '20px sans-serif';
+      ctx.fillText(`Crystals Collected: ${this.crystals} | Press [R] to Play Again`, canvas.width / 2, 280);
+    }
+  },
+
+  renderHUD() {
+    // Health Bar
+    ctx.fillStyle = 'rgba(20, 15, 30, 0.7)';
+    ctx.fillRect(16, 16, 200, 18);
+    const hpPct = Math.max(0, this.player.hp / this.player.maxHp);
+    ctx.fillStyle = '#ff3344';
+    ctx.fillRect(18, 18, 196 * hpPct, 14);
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 11px sans-serif';
+    ctx.fillText(`HP: ${Math.round(this.player.hp)} / ${this.player.maxHp}`, 26, 30);
+
+    // REBOUND METER (Core Game Jam Mechanic)
+    ctx.fillStyle = 'rgba(20, 15, 30, 0.7)';
+    ctx.fillRect(16, 40, 200, 18);
+    const rbPct = this.player.reboundMeter / 100;
+    ctx.fillStyle = this.player.isOverdrive ? '#ffe600' : (this.player.reboundMeter >= 100 ? '#00ffff' : '#aa00ff');
+    ctx.fillRect(18, 42, 196 * rbPct, 14);
+    ctx.fillStyle = '#fff';
+    ctx.fillText(
+      this.player.isOverdrive
+        ? `OVERDRIVE: ${this.player.overdriveTimer.toFixed(1)}s`
+        : (this.player.reboundMeter >= 100 ? '⚡ REBOUND READY! [Q]' : `REBOUND: ${Math.round(this.player.reboundMeter)}%`),
+      26, 54
+    );
+
+    // Crystals
+    ctx.fillStyle = '#00f0ff';
+    ctx.font = 'bold 14px sans-serif';
+    ctx.fillText(`💎 Crystals: ${this.crystals}`, 230, 30);
+
+    // Boss Bar if Boss is near
+    const boss = this.enemies.find(e => e.isBoss && !e.dead);
+    if (boss && Math.hypot(boss.x - this.player.x, boss.y - this.player.y) < 600) {
+      ctx.fillStyle = 'rgba(20, 15, 30, 0.85)';
+      ctx.fillRect(canvas.width / 2 - 150, 16, 300, 20);
+      const bPct = Math.max(0, boss.hp / boss.maxHp);
+      ctx.fillStyle = '#9900ff';
+      ctx.fillRect(canvas.width / 2 - 148, 18, 296 * bPct, 16);
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'center';
+      ctx.fillText('ABYSSAL VOID OVERLORD', canvas.width / 2, 31);
+      ctx.textAlign = 'left';
+    }
+  }
+};
+
+// --- GAME LOOP ---
+Game.init();
+let lastTime = performance.now();
+
+function gameLoop(now) {
+  const dt = Math.min(0.05, (now - lastTime) / 1000);
+  lastTime = now;
+
+  Game.update(dt);
+  Game.render();
+
+  requestAnimationFrame(gameLoop);
+}
+requestAnimationFrame(gameLoop);
+</script>
+
+</body>
+</html>

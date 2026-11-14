@@ -1,0 +1,108 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/shadow_monster.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/shadow_monster/walk_0.png" id="2_w0"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/shadow_monster/walk_1.png" id="3_w1"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/shadow_monster/walk_2.png" id="4_w2"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/shadow_monster/walk_3.png" id="5_w3"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/shadow_monster/attack_0.png" id="6_a0"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/shadow_monster/attack_1.png" id="7_a1"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/shadow_monster/attack_2.png" id="8_a2"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/shadow_monster/hurt_0.png" id="9_h0"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/shadow_monster/hurt_1.png" id="10_h1"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/shadow_monster/death_0.png" id="11_d0"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/shadow_monster/death_1.png" id="12_d1"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/shadow_monster/death_2.png" id="13_d2"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/shadow_monster/death_3.png" id="14_d3"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_a0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_a1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_a2")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_d0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_d1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_d2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_d3")
+}],
+"loop": false,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_h0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_h1")
+}],
+"loop": false,
+"name": &"hurt",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_w0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_w1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_w2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_w3")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(24, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hit"]
+size = Vector2(28, 28)
+
+[node name="ShadowMonster" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_sm")
+animation = &"walk"
+autoplay = "walk"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_hit")
+
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]

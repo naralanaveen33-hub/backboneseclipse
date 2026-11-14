@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/objects/ruined_shrine.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/tiles/shrine_dormant.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_shrine"]
+size = Vector2(32, 48)
+
+[node name="RuinedShrine" type="Area2D"]
+collision_layer = 32
+collision_mask = 10
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_shrine")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

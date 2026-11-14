@@ -1,0 +1,139 @@
+[gd_scene load_steps=24 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/boss_void_monarch.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/idle_0.png" id="2_i0"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/idle_1.png" id="3_i1"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/idle_2.png" id="4_i2"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/idle_3.png" id="5_i3"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/cast_0.png" id="6_c0"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/cast_1.png" id="7_c1"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/cast_2.png" id="8_c2"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/cast_3.png" id="9_c3"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/teleport_0.png" id="10_t0"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/teleport_1.png" id="11_t1"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/teleport_2.png" id="12_t2"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/teleport_3.png" id="13_t3"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/hurt_0.png" id="14_h0"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/hurt_1.png" id="15_h1"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/death_0.png" id="16_d0"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/death_1.png" id="17_d1"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/death_2.png" id="18_d2"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/death_3.png" id="19_d3"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/death_4.png" id="20_d4"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_void_monarch/death_5.png" id="21_d5"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_c0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_c1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_c2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_c3")
+}],
+"loop": false,
+"name": &"cast",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_d0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_d1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_d2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_d3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_d4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_d5")
+}],
+"loop": false,
+"name": &"death",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14_h0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_h1")
+}],
+"loop": false,
+"name": &"hurt",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_i0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_i1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_i2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_i3")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_t0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_t1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_t2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_t3")
+}],
+"loop": false,
+"name": &"teleport",
+"speed": 8.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_body"]
+radius = 20.0
+height = 68.0
+
+[node name="BossVoidMonarch" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_vm")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("CapsuleShape2D_body")
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, 4)
+shape = SubResource("CapsuleShape2D_body")
+
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]

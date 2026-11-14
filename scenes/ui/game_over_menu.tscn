@@ -1,0 +1,152 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/game_over_menu.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/ui/panel_bg.png" id="2_panel"]
+[ext_resource type="Texture2D" path="res://assets/ui/button_normal.png" id="3_btn"]
+[ext_resource type="Texture2D" path="res://assets/ui/button_hover.png" id="4_hov"]
+[ext_resource type="Texture2D" path="res://assets/ui/button_pressed.png" id="5_prs"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font_size = 28
+font_color = Color(0.95, 0.25, 0.3, 1)
+outline_size = 5
+outline_color = Color(0.1, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_sub"]
+font_size = 13
+font_color = Color(0.8, 0.75, 0.85, 1)
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="GameOverMenu" type="CanvasLayer"]
+layer = 15
+script = ExtResource("1_script")
+
+[node name="Panel" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.02, 0.04, 0.8)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -170.0
+offset_top = -160.0
+offset_right = 170.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_panel")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+
+[node name="VBox" type="VBoxContainer" parent="Panel/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 18.0
+offset_right = -24.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Title" type="Label" parent="Panel/NinePatchRect/VBox"]
+layout_mode = 2
+text = "GAME OVER"
+label_settings = SubResource("LabelSettings_title")
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Panel/NinePatchRect/VBox"]
+layout_mode = 2
+text = "The dark magic has overwhelmed you..."
+label_settings = SubResource("LabelSettings_sub")
+horizontal_alignment = 1
+
+[node name="RespawnBtn" type="TextureButton" parent="Panel/NinePatchRect/VBox"]
+custom_minimum_size = Vector2(180, 42)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("3_btn")
+texture_pressed = ExtResource("5_prs")
+texture_hover = ExtResource("4_hov")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Panel/NinePatchRect/VBox/RespawnBtn"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Respawn (R)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RestartLevelBtn" type="TextureButton" parent="Panel/NinePatchRect/VBox"]
+custom_minimum_size = Vector2(180, 42)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("3_btn")
+texture_pressed = ExtResource("5_prs")
+texture_hover = ExtResource("4_hov")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Panel/NinePatchRect/VBox/RestartLevelBtn"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Restart Level"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainMenuBtn" type="TextureButton" parent="Panel/NinePatchRect/VBox"]
+custom_minimum_size = Vector2(180, 42)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("3_btn")
+texture_pressed = ExtResource("5_prs")
+texture_hover = ExtResource("4_hov")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Panel/NinePatchRect/VBox/MainMenuBtn"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Main Menu"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="Panel/NinePatchRect/VBox/RespawnBtn" to="." method="_on_respawn_pressed"]
+[connection signal="pressed" from="Panel/NinePatchRect/VBox/RestartLevelBtn" to="." method="_on_restart_level_pressed"]
+[connection signal="pressed" from="Panel/NinePatchRect/VBox/MainMenuBtn" to="." method="_on_main_menu_pressed"]

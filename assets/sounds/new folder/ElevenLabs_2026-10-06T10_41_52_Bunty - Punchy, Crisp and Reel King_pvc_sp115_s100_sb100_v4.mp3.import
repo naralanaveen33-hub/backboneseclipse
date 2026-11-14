@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://noxvli1tyiq1"
+path="res://.godot/imported/ElevenLabs_2026-10-06T10_41_52_Bunty - Punchy, Crisp and Reel King_pvc_sp115_s100_sb100_v4.mp3-75387b38c3186071dd4ccb3e7691873c.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/new folder/ElevenLabs_2026-10-06T10_41_52_Bunty - Punchy, Crisp and Reel King_pvc_sp115_s100_sb100_v4.mp3"
+dest_files=["res://.godot/imported/ElevenLabs_2026-10-06T10_41_52_Bunty - Punchy, Crisp and Reel King_pvc_sp115_s100_sb100_v4.mp3-75387b38c3186071dd4ccb3e7691873c.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

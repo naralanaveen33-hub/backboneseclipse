@@ -1,0 +1,35 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/abilities/magic_shield.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/effects/projectiles/shield_0.png" id="2_s0"]
+[ext_resource type="Texture2D" path="res://assets/effects/projectiles/shield_1.png" id="3_s1"]
+[ext_resource type="Texture2D" path="res://assets/effects/projectiles/shield_2.png" id="4_s2"]
+[ext_resource type="Texture2D" path="res://assets/effects/projectiles/shield_3.png" id="5_s3"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_shield"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_s0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_s1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_s2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_s3")
+}],
+"loop": true,
+"name": &"active",
+"speed": 8.0
+}]
+
+[node name="MagicShield" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_shield")
+animation = &"active"
+autoplay = "active"

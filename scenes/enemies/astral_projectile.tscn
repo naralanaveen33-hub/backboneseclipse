@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/astral_projectile.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/effects/projectiles/astral_orb_0.png" id="2_a0"]
+[ext_resource type="Texture2D" path="res://assets/effects/projectiles/astral_orb_1.png" id="3_a1"]
+[ext_resource type="Texture2D" path="res://assets/effects/projectiles/astral_orb_2.png" id="4_a2"]
+[ext_resource type="Texture2D" path="res://assets/effects/projectiles/astral_orb_3.png" id="5_a3"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_astral"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_a0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_a1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_a2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_a3")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_col"]
+radius = 9.0
+
+[node name="AstralProjectile" type="Area2D"]
+collision_layer = 16
+collision_mask = 3
+script = ExtResource("1_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_astral")
+animation = &"fly"
+autoplay = "fly"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_col")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 4.0
+one_shot = true
+autostart = true
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

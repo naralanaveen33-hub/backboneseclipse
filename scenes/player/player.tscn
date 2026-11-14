@@ -1,0 +1,212 @@
+[gd_scene load_steps=38 format=3]
+
+[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/idle_0.png" id="2_i0"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/idle_1.png" id="3_i1"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/idle_2.png" id="4_i2"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/idle_3.png" id="5_i3"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/run_0.png" id="6_r0"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/run_1.png" id="7_r1"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/run_2.png" id="8_r2"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/run_3.png" id="9_r3"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/run_4.png" id="10_r4"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/run_5.png" id="11_r5"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/jump_0.png" id="12_j0"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/jump_1.png" id="13_j1"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/fall_0.png" id="14_f0"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/fall_1.png" id="15_f1"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/attack_0.png" id="16_a0"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/attack_1.png" id="17_a1"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/attack_2.png" id="18_a2"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/attack_3.png" id="19_a3"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/hurt_0.png" id="20_h0"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/hurt_1.png" id="21_h1"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/death_0.png" id="22_d0"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/death_1.png" id="23_d1"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/death_2.png" id="24_d2"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/death_3.png" id="25_d3"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/death_4.png" id="26_d4"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/death_5.png" id="27_d5"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/respawn_0.png" id="28_s0"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/respawn_1.png" id="29_s1"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/respawn_2.png" id="30_s2"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/respawn_3.png" id="31_s3"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/respawn_4.png" id="32_s4"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/respawn_5.png" id="33_s5"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wiz"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_a0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_a1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_a2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_a3")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("22_d0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_d1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_d2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_d3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_d4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_d5")
+}],
+"loop": false,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14_f0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_f1")
+}],
+"loop": true,
+"name": &"fall",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_h0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_h1")
+}],
+"loop": false,
+"name": &"hurt",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_i0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_i1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_i2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_i3")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_j0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_j1")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("28_s0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_s1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_s2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_s3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_s4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_s5")
+}],
+"loop": false,
+"name": &"respawn",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_r0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_r1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_r2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_r3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_r4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_r5")
+}],
+"loop": true,
+"name": &"run",
+"speed": 10.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_body"]
+radius = 9.0
+height = 32.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hurt"]
+radius = 10.0
+height = 34.0
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_wiz")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 7)
+shape = SubResource("CapsuleShape2D_body")
+
+[node name="CastPoint" type="Marker2D" parent="."]
+position = Vector2(16, 4)
+
+[node name="HurtBox" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 20
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2(0, 7)
+shape = SubResource("CapsuleShape2D_hurt")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0
+limit_smoothed = true
