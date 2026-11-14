@@ -56,7 +56,8 @@ func _show_bounce_back_intro() -> void:
 		4: "⚡ BOUNCE BACK: THE FROZEN CRYPTS (LEVEL 4) ⚡",
 		5: "⚡ BOUNCE BACK: THE TEMPEST SPIRE (LEVEL 5) ⚡",
 		6: "⚡ BOUNCE BACK: THE ASTRAL VOID (LEVEL 6) ⚡",
-		7: "⚡ BOUNCE BACK: THE ABYSSAL THRONE — FINAL BATTLE (LEVEL 7) ⚡"
+		7: "⚡ BOUNCE BACK: THE ABYSSAL THRONE — FINAL BATTLE (LEVEL 7) ⚡",
+		8: "👑 BOUNCE BACK: PRIMORDIAL SINGULARITY CORE — ULTIMATE BOSS (LEVEL 8) 👑"
 	}
 	
 	var missions = {
@@ -66,7 +67,8 @@ func _show_bounce_back_intro() -> void:
 		4: "Brave the permafrost of the Frozen Crypts to slay the Frost Lich Sovereign!\nFreezing winds slow your advance.",
 		5: "Ascend the electric heights of the Tempest Spire and conquer the Storm Thunder Archon!\nRide the thunder gale.",
 		6: "Enter the cosmic Sanctum of the Mysteries and defeat the Celestial Void Monarch!\nDimensions unravel around you.",
-		7: "THE SUPREME FINAL SHOWDOWN! Defeat Abyssal Overlord Malakor\nand reclaim the Stolen Celestial Relic once and for all!"
+		7: "THE SUPREME FINAL SHOWDOWN! Defeat Abyssal Overlord Malakor\nand reclaim the Stolen Celestial Relic once and for all!",
+		8: "THE TRUE COSMIC APOCALYPSE! Confront Primordial Void Emperor Malakor!\n50,000 HP • 4 Multi-Phase Transformations • Supersonic Dashes • Stun Waves • Ultimate Rage Mode!"
 	}
 	
 	var tips = {
@@ -76,7 +78,8 @@ func _show_bounce_back_intro() -> void:
 		4: "THEME TIP: Deflect the Frost Lich's shards back into him to freeze him in place!",
 		5: "THEME TIP: Near-misses charge your Rebound Meter! Press [Q] at 100% for 5s Overdrive!",
 		6: "THEME TIP: Overdrive gives 5-bounce mega ricochets and machine-gun cast rates!",
-		7: "THEME TIP: Chain Parry Deflections and Rebound Shockwaves to conquer the Overlord!"
+		7: "THEME TIP: Chain Parry Deflections and Rebound Shockwaves to conquer the Overlord!",
+		8: "THEME TIP: Timed Parry deflects Dark Orbs for 3x damage! Jump over Ground Waves! Crack his Shield with Ricochet Spells!"
 	}
 	
 	var title = Label.new()

@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/dark_energy_beam.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/effects/projectiles/dark_beam.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_beam"]
+size = Vector2(900, 28)
+
+[node name="DarkEnergyBeam" type="Area2D"]
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("1_script")
+
+[node name="BeamSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_beam")
+
+[node name="TelegraphLine" type="Line2D" parent="."]

@@ -16,6 +16,10 @@ var is_parrying: bool = false
 var parry_timer: float = 0.0
 var parry_cooldown: float = 0.0
 
+var is_stunned: bool = false
+var stun_timer: float = 0.0
+var stun_indicator: Sprite2D = null
+
 var coyote_timer: float = 0.0
 var jump_buffer: float = 0.0
 var attack_timer: float = 0.0
@@ -60,6 +64,19 @@ func _physics_process(delta: float) -> void:
 		if not is_on_floor():
 			velocity.y += gravity * delta
 		move_and_slide()
+		return
+
+	if is_stunned:
+		stun_timer -= delta
+		velocity.x = move_toward(velocity.x, 0.0, friction * delta)
+		if not is_on_floor():
+			velocity.y += gravity * delta
+		move_and_slide()
+		anim.play("hurt")
+		if stun_indicator:
+			stun_indicator.rotation += delta * 6.0
+		if stun_timer <= 0.0:
+			clear_stun()
 		return
 
 	# Handle R key restart from checkpoint
@@ -325,6 +342,39 @@ func take_damage(amount: float, source_pos: Vector2 = Vector2.ZERO) -> void:
 			velocity.y = -140.0
 		_play_hurt_effect()
 
+func stun(duration: float = 1.5) -> void:
+	if is_dead or is_spawning:
+		return
+	if is_parrying:
+		GameManager.pop_floating_text("STUN PUSHED BACK!", global_position + Vector2(0, -35), Color(1.0, 0.9, 0.2))
+		SoundManager.play_sfx_pitched("crystal", 1.8)
+		GameManager.add_rebound(30.0)
+		return
+	is_stunned = true
+	stun_timer = maxf(stun_timer, duration)
+	GameManager.pop_floating_text("STUNNED!", global_position + Vector2(0, -30), Color(1.0, 0.85, 0.1))
+	SoundManager.play_sfx("lightning")
+	_show_stun_visual()
+
+func clear_stun() -> void:
+	is_stunned = false
+	stun_timer = 0.0
+	if stun_indicator and is_instance_valid(stun_indicator):
+		stun_indicator.queue_free()
+		stun_indicator = null
+	if not is_dead:
+		anim.modulate = Color.WHITE
+
+func _show_stun_visual() -> void:
+	if not stun_indicator or not is_instance_valid(stun_indicator):
+		stun_indicator = Sprite2D.new()
+		var tex = load("res://assets/effects/projectiles/stun_spark.png")
+		if tex:
+			stun_indicator.texture = tex
+		stun_indicator.position = Vector2(0, -28)
+		add_child(stun_indicator)
+	anim.modulate = Color(1.3, 1.2, 0.3)
+
 func _play_hurt_effect() -> void:
 	anim.play("hurt")
 	GameManager.is_invulnerable = true
@@ -335,6 +385,7 @@ func _play_hurt_effect() -> void:
 	GameManager.is_invulnerable = false
 
 func _on_player_died() -> void:
+	clear_stun()
 	is_dead = true
 	velocity = Vector2.ZERO
 	anim.play("death")
@@ -343,6 +394,7 @@ func _on_player_respawned() -> void:
 	_play_respawn()
 
 func _play_respawn() -> void:
+	clear_stun()
 	is_dead = false
 	is_spawning = true
 	is_parrying = false

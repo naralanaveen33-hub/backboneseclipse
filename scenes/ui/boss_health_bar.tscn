@@ -1,0 +1,80 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/boss_health_bar.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/ui/boss_bar_bg.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/ui/boss_fill.png" id="3_fill"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font_size = 18
+font_color = Color(1, 0.88, 0.4, 1)
+outline_size = 4
+outline_color = Color(0.12, 0.05, 0.18, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_phase"]
+font_size = 13
+font_color = Color(0.8, 0.7, 1, 1)
+outline_size = 3
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_hp"]
+font_size = 12
+font_color = Color(1, 1, 1, 1)
+outline_size = 3
+outline_color = Color(0.1, 0, 0.1, 1)
+
+[node name="BossHealthBarUI" type="CanvasLayer"]
+layer = 50
+script = ExtResource("1_script")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -280.0
+offset_top = 18.0
+offset_right = 280.0
+offset_bottom = 90.0
+grow_horizontal = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "PRIMORDIAL VOID EMPEROR MALAKOR"
+label_settings = SubResource("LabelSettings_title")
+horizontal_alignment = 1
+
+[node name="PhaseLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "✦ PHASE 1: DORMANT SINGULARITY ✦"
+label_settings = SubResource("LabelSettings_phase")
+horizontal_alignment = 1
+
+[node name="BarContainer" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(560, 26)
+layout_mode = 2
+
+[node name="HPBar" type="TextureProgressBar" parent="VBoxContainer/BarContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 50000.0
+value = 50000.0
+nine_patch_stretch = true
+texture_under = ExtResource("2_bg")
+texture_progress = ExtResource("3_fill")
+
+[node name="HPText" type="Label" parent="VBoxContainer/BarContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "50,000 / 50,000 HP (100%)"
+label_settings = SubResource("LabelSettings_hp")
+horizontal_alignment = 1
+vertical_alignment = 1

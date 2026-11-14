@@ -1,12 +1,12 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene format=3 uid="uid://dv4wpgr456auh"]
 
-[ext_resource type="Script" path="res://scripts/menus/main_menu.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/backgrounds/forest/sky.png" id="2_sky"]
-[ext_resource type="Texture2D" path="res://assets/backgrounds/forest/mountains.png" id="3_mount"]
-[ext_resource type="Texture2D" path="res://assets/backgrounds/forest/trees_bg.png" id="4_trees"]
-[ext_resource type="Texture2D" path="res://assets/ui/button_normal.png" id="5_btn"]
-[ext_resource type="Texture2D" path="res://assets/ui/button_hover.png" id="6_hov"]
-[ext_resource type="Texture2D" path="res://assets/ui/button_pressed.png" id="7_prs"]
+[ext_resource type="Script" uid="uid://cyxfa1jj4fu6x" path="res://scripts/menus/main_menu.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cq0o3y7mda54j" path="res://assets/backgrounds/forest/sky.png" id="2_sky"]
+[ext_resource type="Texture2D" uid="uid://bnlt7j852d5hy" path="res://assets/backgrounds/forest/mountains.png" id="3_mount"]
+[ext_resource type="Texture2D" uid="uid://chsjpepknpmil" path="res://assets/backgrounds/forest/trees_bg.png" id="4_trees"]
+[ext_resource type="Texture2D" uid="uid://y7pi2pwt6ngv" path="res://assets/ui/button_normal.png" id="5_btn"]
+[ext_resource type="Texture2D" uid="uid://f83yncgg4fcd" path="res://assets/ui/button_hover.png" id="6_hov"]
+[ext_resource type="Texture2D" uid="uid://cme586w5hhqh4" path="res://assets/ui/button_pressed.png" id="7_prs"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 42
@@ -20,7 +20,7 @@ font_color = Color(0.6, 0.9, 1, 1)
 outline_size = 4
 outline_color = Color(0.08, 0.04, 0.15, 1)
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=476889161]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,7 +29,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
 
-[node name="Sky" type="TextureRect" parent="."]
+[node name="Sky" type="TextureRect" parent="." unique_id=800528970]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -39,7 +39,7 @@ grow_vertical = 2
 texture = ExtResource("2_sky")
 expand_mode = 1
 
-[node name="Mountains" type="TextureRect" parent="."]
+[node name="Mountains" type="TextureRect" parent="." unique_id=2031688122]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -49,7 +49,7 @@ grow_vertical = 2
 texture = ExtResource("3_mount")
 expand_mode = 1
 
-[node name="Trees" type="TextureRect" parent="."]
+[node name="Trees" type="TextureRect" parent="." unique_id=625331331]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -59,7 +59,7 @@ grow_vertical = 2
 texture = ExtResource("4_trees")
 expand_mode = 1
 
-[node name="VBoxHeader" type="VBoxContainer" parent="."]
+[node name="VBoxHeader" type="VBoxContainer" parent="." unique_id=1888445824]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -71,19 +71,19 @@ offset_bottom = 140.0
 grow_horizontal = 2
 theme_override_constants/separation = 4
 
-[node name="Title" type="Label" parent="VBoxHeader"]
+[node name="Title" type="Label" parent="VBoxHeader" unique_id=1172346430]
 layout_mode = 2
 text = "MYSTIC REALMS"
 label_settings = SubResource("LabelSettings_title")
 horizontal_alignment = 1
 
-[node name="Subtitle" type="Label" parent="VBoxHeader"]
+[node name="Subtitle" type="Label" parent="VBoxHeader" unique_id=1877897209]
 layout_mode = 2
 text = "THE POWER OF MAGIC"
 label_settings = SubResource("LabelSettings_sub")
 horizontal_alignment = 1
 
-[node name="VBoxButtons" type="VBoxContainer" parent="."]
+[node name="VBoxButtons" type="VBoxContainer" parent="." unique_id=1568758233]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -98,7 +98,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 14
 
-[node name="StartBtn" type="TextureButton" parent="VBoxButtons"]
+[node name="StartBtn" type="TextureButton" parent="VBoxButtons" unique_id=506167043]
 custom_minimum_size = Vector2(200, 44)
 layout_mode = 2
 texture_normal = ExtResource("5_btn")
@@ -107,7 +107,7 @@ texture_hover = ExtResource("6_hov")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="VBoxButtons/StartBtn"]
+[node name="Label" type="Label" parent="VBoxButtons/StartBtn" unique_id=1999129057]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -118,7 +118,7 @@ text = "Start Adventure"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LevelSelectBtn" type="TextureButton" parent="VBoxButtons"]
+[node name="LevelSelectBtn" type="TextureButton" parent="VBoxButtons" unique_id=560083781]
 custom_minimum_size = Vector2(200, 44)
 layout_mode = 2
 texture_normal = ExtResource("5_btn")
@@ -127,7 +127,7 @@ texture_hover = ExtResource("6_hov")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="VBoxButtons/LevelSelectBtn"]
+[node name="Label" type="Label" parent="VBoxButtons/LevelSelectBtn" unique_id=800147077]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -138,7 +138,7 @@ text = "Level Selection"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="QuitBtn" type="TextureButton" parent="VBoxButtons"]
+[node name="QuitBtn" type="TextureButton" parent="VBoxButtons" unique_id=1261945684]
 custom_minimum_size = Vector2(200, 44)
 layout_mode = 2
 texture_normal = ExtResource("5_btn")
@@ -147,7 +147,7 @@ texture_hover = ExtResource("6_hov")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="VBoxButtons/QuitBtn"]
+[node name="Label" type="Label" parent="VBoxButtons/QuitBtn" unique_id=1355383722]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

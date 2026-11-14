@@ -336,8 +336,14 @@ func complete_level() -> void:
 		post_notification("Level 6 Complete! Approaching The Abyssal Throne for the Final Battle...")
 		await get_tree().create_timer(1.8).timeout
 		start_level(7)
-	elif current_level >= 7:
-		post_notification("THE STOLEN RELIC IS RECLAIMED! SUPREME VICTORY!")
+	elif current_level == 7:
+		max_level_unlocked = max(max_level_unlocked, 8)
+		save_game()
+		post_notification("Level 7 Complete! The Void Singularity Awakens... Entering Level 8!")
+		await get_tree().create_timer(1.8).timeout
+		start_level(8)
+	elif current_level >= 8:
+		post_notification("👑 THE PRIMORDIAL VOID EMPEROR HAS FALLEN! SUPREME VICTORY! 👑")
 		SoundManager.play_sfx("victory")
 		save_game()
 		await get_tree().create_timer(2.0).timeout

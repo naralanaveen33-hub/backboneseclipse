@@ -12,7 +12,7 @@ const SCENE_DARK_ORB = preload("res://scenes/enemies/dark_orb_projectile.tscn")
 signal boss_died()
 
 func _ready() -> void:
-	max_hp = 500.0
+	max_hp = 800.0
 	damage = 30.0
 	speed = 75.0
 	crystals_dropped = 12
@@ -120,7 +120,8 @@ func _attack_charge(player: Node2D) -> void:
 	SoundManager.play_sfx("boss_roar")
 	anim.play("idle")
 	var charge_dir = facing
-	var charge_duration = 0.85
+	var charge_duration = 0.10
+
 	
 	while charge_duration > 0 and not is_dead and not is_frozen:
 		velocity.x = charge_dir * speed * 2.4

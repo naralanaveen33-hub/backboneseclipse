@@ -1,7 +1,7 @@
 # 🧙‍♂️ MYSTIC REALMS: BOUNCE BACK
-### The Power of Magic — 7 Levels & 7 Bosses Game Jam Edition
+### The Power of Magic — 8 Levels & 8 Bosses Ultimate Edition
 
-A complete, polished 2D fantasy action adventure platformer built in **Godot 4.x**, deeply integrating the Game Jam theme **"BOUNCE BACK"** across combat, platforming mobility, risk-reward loop, and progression. Features the epic anthem **"Lord of the Mysteries - Dark Dream" by Curley Gao**, 7 full playable levels, and 7 formidable boss encounters with active multi-phase attacks!
+A complete, polished 2D fantasy action adventure platformer built in **Godot 4.x**, deeply integrating the Game Jam theme **"BOUNCE BACK"** across combat, platforming mobility, risk-reward loop, and progression. Features the epic anthem **"Lord of the Mysteries - Dark Dream" by Curley Gao**, 8 full playable levels, and 8 formidable boss encounters including the 50,000 HP Primordial Void Emperor with active multi-phase attacks!
 
 ---
 
@@ -74,11 +74,36 @@ A complete, polished 2D fantasy action adventure platformer built in **Godot 4.x
 
 ### 👑 Level 7: The Abyssal Throne (The Final Showdown)
 - **Atmosphere:** Crimson eclipse void, colossal black hole, throne pillars of the ancient citadel.
-- **Supreme Final Boss:** **Abyssal Overlord Malakor - Reclaimer of the Relics** (1800 HP)
+- **Boss:** **Abyssal Overlord Malakor - Reclaimer of the Relics** (1800 HP)
 - **Attacks:** 3 Climactic Phases!
   - **Phase 1:** Chaos Orb barrages (5 orbs, deflectable!), Teleport strikes.
   - **Phase 2:** Chaos & Magma Dual Barrages (8 orbs!), Minion portals, Sky meteor strikes.
   - **Phase 3 (Apocalyptic Overdrive):** 12-orb radial bullet hell! Chain Parry Deflections and Rebound Overdrive to defeat Malakor and reclaim your stolen glory!
+
+### 🌌👑 Level 8: The Primordial Singularity Core (THE ULTIMATE BOSS REALM)
+- **Atmosphere:** Cosmic Singularity with accretion disk, shattered galaxies, colossal dark monolith spires, floating obsidian ruin pillars with glowing runes.
+- **The Ultimate Supreme Boss:** **PRIMORDIAL VOID EMPEROR MALAKOR** (**50,000 HP**)
+- **Dedicated Systems & 8 Core Ability Trees:**
+  1. **Teleportation:** Instantly phases behind player for ambush combos; teleports randomly across the arena; dark vortex rifts with audio/visual feedback; dynamic cooldowns (3.5s $\to$ 1.0s).
+  2. **Super Speed:** Sprints at supersonic speeds (220 $\to$ 550 px/s) with rapid acceleration; high-speed dash attacks (850-1000 px/s); fading motion trail ghosts (`BossGhostTrail`); instant responsive turning.
+  3. **Stun Attack:** Channels electric dark lightning, firing an expanding `ElectricShockwave` that deals damage and applies an active 1.8s stun lock to the player; visual orbiting stun sparks and electric flashing over player. Deflectable via Timed Parry!
+  4. **Dark Energy Attack:** 
+     - **Multi-Orb Barrage:** 5 to 14 dark energy balls with homing tendrils (deflectable by timed parry for $3\times$ speed & damage!).
+     - **Massive Void Explosion:** Telegraph warning circle followed by colossal screen-shaking dark blast (50+ AoE dmg).
+     - **Full-Screen Dark Energy Beam:** Red laser aim guide telegraph charging into a devastating full-screen destructive beam.
+  5. **Special Abilities:**
+     - **Minion Summoning:** Spawns flying bats, shadow monsters, and fire demons from void portals.
+     - **Protective Shield:** Spawns a 2,500 HP glowing hexagonal void barrier absorbing all damage until shattered.
+     - **Health Regeneration:** Channels dark siphon runes recovering 1,200 HP/tick (+3,600 HP total).
+     - **Ground Slam & Energy Waves:** Leaps high, plunges violently at 1250 px/s, releasing twin high-speed ground-slicing energy waves left and right.
+  6. **4-Phase System & Appearance Transformations:**
+     - **Phase 1 (50,000 - 37,500 HP):** Obsidian Void Armor with Deep Violet Aura (Scale $1.1\times$, Speed 220 px/s).
+     - **Phase 2 (37,500 - 25,000 HP):** Crimson Void Surge with glowing red eye flares & fire trail (Speed 320 px/s, contact damage +30%, dash attacks, stun shockwave, minion summons).
+     - **Phase 3 (25,000 - 10,000 HP):** Astral Cosmic Electric Cyan with celestial wings (Speed 420 px/s, instant teleport behind player combos, protective shield, dark energy beam, health regen).
+     - **Phase 4 (10,000 - 0 HP):** Supreme Apocalyptic Rage Mode (Solar Gold Overdrive glow, Speed 550 px/s, massive triple explosions, full-screen beams, 14-orb spiral bullet hell, relentless rage roaring!).
+  7. **Dedicated Large Boss Health Bar UI:**
+     - Displays title, active phase badges (`[PHASE 1]` to `[PHASE 4: ULTIMATE RAGE]`), numerical HP (`50,000 / 50,000 HP (100%)`), and smooth animated bar with phase-shifting glow colors.
+  8. **All 9 Dedicated Animations:** `idle`, `running`, `teleporting`, `attacking`, `dashing`, `taking_damage`, `stunned`, `ultimate_attack`, `death`.
 
 ---
 
@@ -106,11 +131,11 @@ A complete, polished 2D fantasy action adventure platformer built in **Godot 4.x
 # Launch the full game starting at Main Menu:
 /Users/naralanaveen/Downloads/Godot.app/Contents/MacOS/Godot
 
-# Or launch directly into Level 1:
-/Users/naralanaveen/Downloads/Godot.app/Contents/MacOS/Godot scenes/levels/level_1.tscn
+# Or launch directly into Level 8 (Ultimate Boss):
+/Users/naralanaveen/Downloads/Godot.app/Contents/MacOS/Godot scenes/levels/level_8.tscn
 
-# Or jump to any level (level_1 through level_7):
-/Users/naralanaveen/Downloads/Godot.app/Contents/MacOS/Godot scenes/levels/level_7.tscn
+# Or jump to any level (level_1 through level_8):
+/Users/naralanaveen/Downloads/Godot.app/Contents/MacOS/Godot scenes/levels/level_1.tscn
 ```
 
 ### Method 2: Run Automated In-Engine Test Suite (100% Pass)

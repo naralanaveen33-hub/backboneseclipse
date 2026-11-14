@@ -1,0 +1,255 @@
+[gd_scene load_steps=42 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/boss_ultimate_overlord.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/attacking_0.png" id="2_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/attacking_1.png" id="3_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/attacking_2.png" id="4_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/attacking_3.png" id="5_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/dashing_0.png" id="6_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/dashing_1.png" id="7_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/dashing_2.png" id="8_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/dashing_3.png" id="9_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/death_0.png" id="10_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/death_1.png" id="11_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/death_2.png" id="12_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/death_3.png" id="13_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/death_4.png" id="14_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/death_5.png" id="15_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/idle_0.png" id="16_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/idle_1.png" id="17_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/idle_2.png" id="18_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/idle_3.png" id="19_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/running_0.png" id="20_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/running_1.png" id="21_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/running_2.png" id="22_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/running_3.png" id="23_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/stunned_0.png" id="24_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/stunned_1.png" id="25_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/stunned_2.png" id="26_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/taking_damage_0.png" id="27_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/taking_damage_1.png" id="28_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/teleporting_0.png" id="29_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/teleporting_1.png" id="30_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/teleporting_2.png" id="31_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/teleporting_3.png" id="32_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/ultimate_attack_0.png" id="33_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/ultimate_attack_1.png" id="34_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/ultimate_attack_2.png" id="35_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/ultimate_attack_3.png" id="36_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/ultimate_attack_4.png" id="37_ext"]
+[ext_resource type="Texture2D" path="res://assets/characters/enemies/boss_ultimate_overlord/ultimate_attack_5.png" id="38_ext"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_boss"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_ext")
+}],
+"loop": false,
+"name": &"attacking",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_ext")
+}],
+"loop": true,
+"name": &"dashing",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_ext")
+}],
+"loop": false,
+"name": &"death",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_ext")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_ext")
+}],
+"loop": true,
+"name": &"running",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("24_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_ext")
+}],
+"loop": true,
+"name": &"stunned",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("27_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_ext")
+}],
+"loop": false,
+"name": &"taking_damage",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("29_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_ext")
+}],
+"loop": false,
+"name": &"teleporting",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("33_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_ext")
+}],
+"loop": false,
+"name": &"ultimate_attack",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(40, 72)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hit"]
+size = Vector2(48, 76)
+
+[node name="BossUltimateOverlord" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."] 
+sprite_frames = SubResource("SpriteFrames_boss")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."] 
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Hitbox" type="Area2D" parent="."] 
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"] 
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_hit")
+
+[node name="CastPoint" type="Marker2D" parent="."] 
+position = Vector2(24, 0)
+
+[node name="BeamPoint" type="Marker2D" parent="."] 
+position = Vector2(30, 4)
+
+[node name="AuraParticles" type="CPUParticles2D" parent="."] 
+amount = 32
+lifetime = 1.2
+emission_shape = 1
+emission_sphere_radius = 28.0
+gravity = Vector2(0, -60)
+scale_amount_min = 2.0
+scale_amount_max = 5.0
+color = Color(0.7, 0.2, 0.9, 0.7)
+
+[node name="RageParticles" type="CPUParticles2D" parent="."] 
+emitting = false
+amount = 64
+lifetime = 0.8
+emission_shape = 1
+emission_sphere_radius = 35.0
+gravity = Vector2(0, -120)
+scale_amount_min = 3.0
+scale_amount_max = 7.0
+color = Color(1.0, 0.3, 0.1, 0.85)
+
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate updated scenes/menus/level_select.tscn and scripts/menus/level_select.gd for 7 levels.
+Generate updated scenes/menus/level_select.tscn and scripts/menus/level_select.gd for 8 levels.
 """
 
 def build_level_select():
@@ -14,7 +14,7 @@ def build_level_select():
 [ext_resource type="Texture2D" path="res://assets/ui/button_pressed.png" id="6_prs"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
-font_size = 24
+font_size = 22
 font_color = Color(1, 0.88, 0.45, 1)
 outline_size = 5
 outline_color = Color(0.1, 0.05, 0.15, 1)
@@ -79,7 +79,7 @@ alignment = 1
 
 [node name="Title" type="Label" parent="NinePatchRect/VBox"]
 layout_mode = 2
-text = "SELECT REALM (7 LEVELS & BOSSES)"
+text = "SELECT REALM (8 LEVELS & BOSSES)"
 label_settings = SubResource("LabelSettings_title")
 horizontal_alignment = 1
 
@@ -97,7 +97,8 @@ columns = 2
         (4, "4: Frozen Crypts (Frost Lich)"),
         (5, "5: Tempest Spire (Storm Archon)"),
         (6, "6: Astral Void (Void Monarch)"),
-        (7, "7: Abyssal Throne (Malakor)")
+        (7, "7: Abyssal Throne (Malakor)"),
+        (8, "8: Singularity Core (ULTIMATE BOSS)")
     ]
     for lid, lname in levels:
         tscn += f"""[node name="Level{lid}Btn" type="TextureButton" parent="NinePatchRect/VBox/Grid"]
@@ -152,11 +153,12 @@ vertical_alignment = 1
 [connection signal="pressed" from="NinePatchRect/VBox/Grid/Level5Btn" to="." method="_on_level_5_pressed"]
 [connection signal="pressed" from="NinePatchRect/VBox/Grid/Level6Btn" to="." method="_on_level_6_pressed"]
 [connection signal="pressed" from="NinePatchRect/VBox/Grid/Level7Btn" to="." method="_on_level_7_pressed"]
+[connection signal="pressed" from="NinePatchRect/VBox/Grid/Level8Btn" to="." method="_on_level_8_pressed"]
 [connection signal="pressed" from="NinePatchRect/VBox/BackBtn" to="." method="_on_back_pressed"]
 """
     with open("scenes/menus/level_select.tscn", "w") as f:
         f.write(tscn)
-    print("Built scenes/menus/level_select.tscn")
+    print("Built scenes/menus/level_select.tscn with 8 levels!")
 
 if __name__ == "__main__":
     build_level_select()

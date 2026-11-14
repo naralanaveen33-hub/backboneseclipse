@@ -2,7 +2,7 @@ extends EnemyBase
 
 @export var patrol_distance: float = 120.0
 @export var detection_range: float = 160.0
-@export var attack_range: float = 38.0
+@export var attack_range: float = 40.0
 
 var start_x: float = 0.0
 var direction: float = 1.0
@@ -70,4 +70,5 @@ func _attack_player(player: Node2D) -> void:
 	if not is_dead and not is_frozen and player and global_position.distance_to(player.global_position) <= attack_range + 10.0:
 		player.take_damage(damage, global_position)
 	is_attacking = false
-	attack_cooldown = 1.2
+	attack_cooldown = 0.26
+	
