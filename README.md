@@ -7,10 +7,15 @@ A complete, polished fantasy action adventure platformer built in **Godot 4.x**,
 ---
 
 ## 🎬 3D Entry Animation & Credits
-- **Cinematic 3D Opening Splash Scene:** (`scenes/intro/intro_splash_3d.tscn`)
-  - Features real-time 3D graphics in Godot 4: a dynamic dolly-in `Camera3D`, glowing emissive celestial core, multi-axis spinning 3D rings (`TorusMesh`), orbiting crystal prisms, and floating stardust particles.
-  - **Bouncy Title Drop:** `"GAME: BOUNCE BACK"` drops in with an energetic 3D bounce-in easing curve (`Tween.TRANS_BACK, Tween.EASE_OUT`).
-  - **Creator Fanfare:** `"✦ CREATED BY DHONI AND PRATHIK ✦"` rises into 3D view in electric cyan with victory fanfare audio.
+- **Cinematic 3D Opening Scene (20-Second Choreographed Showcase):** (`scenes/intro/intro_splash_3d.tscn`)
+  - **Player Wand Dance & Spell Shooting**: Center stage on an obsidian and runic marble dais, the hooded archmage dances rhythmically with the wand—performing footwork steps, 360° pirouette spins, leaps, and wand flourishes.
+  - **3D Spell Projectiles & Ricochets**: While dancing, the player shoots dynamic bouncing spell volleys (solar fireballs, glacial ice bolts, gold bursts, and upward Astral Void beams) that ricochet in 3D off celestial rings with pitch-escalating crystalline chimes and fireworks.
+  - **Crystal Clear Typography**: Uses high-definition TrueType vector fonts (`cinematic_black.ttf` & `cinematic_bold.ttf`) with deep contrast outlines, linear mipmap filtering, and billboard rendering for maximum readability.
+  - **Choreographed Reveals**:
+    - **0s–5s**: Dance step footwork & initial spell volleys; reveals `✦ MYSTIC REALMS ✦`.
+    - **5s–11s**: Air-dance pirouette jump & 4-way cross-volley ricochets; massive bounce drop of `GAME: BOUNCE BACK`.
+    - **11s–16s**: Skyward Astral Void beam; reveals `✦ CREATED BY DHONI AND PRATHIK ✦` in electric cyan with fanfare.
+    - **16s–20s**: Triumphant golden staff victory pose and clear interactive prompt `[ PRESS SPACE / ENTER / CLICK TO PLAY ]`.
   - Smooth skip/transition anytime on `[Space]`, `[Enter]`, or Click directly into the Main Menu.
 
 ---

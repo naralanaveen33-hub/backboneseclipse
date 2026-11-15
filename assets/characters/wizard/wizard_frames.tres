@@ -1,0 +1,222 @@
+[gd_resource type="SpriteFrames" load_steps=33 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/idle_0.png" id="1_id1"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/idle_1.png" id="2_id2"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/idle_2.png" id="3_id3"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/idle_3.png" id="4_id4"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/run_0.png" id="5_ru5"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/run_1.png" id="6_ru6"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/run_2.png" id="7_ru7"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/run_3.png" id="8_ru8"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/run_4.png" id="9_ru9"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/run_5.png" id="10_ru10"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/jump_0.png" id="11_ju11"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/jump_1.png" id="12_ju12"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/fall_0.png" id="13_fa13"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/fall_1.png" id="14_fa14"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/attack_0.png" id="15_at15"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/attack_1.png" id="16_at16"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/attack_2.png" id="17_at17"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/attack_3.png" id="18_at18"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/hurt_0.png" id="19_hu19"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/hurt_1.png" id="20_hu20"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/death_0.png" id="21_de21"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/death_1.png" id="22_de22"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/death_2.png" id="23_de23"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/death_3.png" id="24_de24"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/death_4.png" id="25_de25"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/death_5.png" id="26_de26"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/respawn_0.png" id="27_re27"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/respawn_1.png" id="28_re28"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/respawn_2.png" id="29_re29"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/respawn_3.png" id="30_re30"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/respawn_4.png" id="31_re31"]
+[ext_resource type="Texture2D" path="res://assets/characters/wizard/respawn_5.png" id="32_re32"]
+
+[resource]
+animations = [
+  {
+    "frames": [
+      {
+        "duration": 1.0,
+        "texture": ExtResource("15_at15")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("16_at16")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("17_at17")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("18_at18")
+      }
+    ],
+    "loop": false,
+    "name": &"attack",
+    "speed": 14.0
+  },
+  {
+    "frames": [
+      {
+        "duration": 1.0,
+        "texture": ExtResource("21_de21")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("22_de22")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("23_de23")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("24_de24")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("25_de25")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("26_de26")
+      }
+    ],
+    "loop": false,
+    "name": &"death",
+    "speed": 8.0
+  },
+  {
+    "frames": [
+      {
+        "duration": 1.0,
+        "texture": ExtResource("13_fa13")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("14_fa14")
+      }
+    ],
+    "loop": true,
+    "name": &"fall",
+    "speed": 8.0
+  },
+  {
+    "frames": [
+      {
+        "duration": 1.0,
+        "texture": ExtResource("19_hu19")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("20_hu20")
+      }
+    ],
+    "loop": false,
+    "name": &"hurt",
+    "speed": 8.0
+  },
+  {
+    "frames": [
+      {
+        "duration": 1.0,
+        "texture": ExtResource("1_id1")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("2_id2")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("3_id3")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("4_id4")
+      }
+    ],
+    "loop": true,
+    "name": &"idle",
+    "speed": 6.0
+  },
+  {
+    "frames": [
+      {
+        "duration": 1.0,
+        "texture": ExtResource("11_ju11")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("12_ju12")
+      }
+    ],
+    "loop": true,
+    "name": &"jump",
+    "speed": 8.0
+  },
+  {
+    "frames": [
+      {
+        "duration": 1.0,
+        "texture": ExtResource("27_re27")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("28_re28")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("29_re29")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("30_re30")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("31_re31")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("32_re32")
+      }
+    ],
+    "loop": false,
+    "name": &"respawn",
+    "speed": 9.0
+  },
+  {
+    "frames": [
+      {
+        "duration": 1.0,
+        "texture": ExtResource("5_ru5")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("6_ru6")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("7_ru7")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("8_ru8")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("9_ru9")
+      },
+      {
+        "duration": 1.0,
+        "texture": ExtResource("10_ru10")
+      }
+    ],
+    "loop": true,
+    "name": &"run",
+    "speed": 10.0
+  }
+]
