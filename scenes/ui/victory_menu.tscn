@@ -90,6 +90,12 @@ text = "Crystals Collected: 0"
 label_settings = SubResource("LabelSettings_sub")
 horizontal_alignment = 1
 
+[node name="StatsLabel" type="Label" parent="NinePatchRect/VBox"]
+layout_mode = 2
+text = "💀 Total Deaths: 0  |  🔄 Total Respawns: 0"
+label_settings = SubResource("LabelSettings_sub")
+horizontal_alignment = 1
+
 [node name="PlayAgainBtn" type="TextureButton" parent="NinePatchRect/VBox"]
 custom_minimum_size = Vector2(180, 42)
 layout_mode = 2

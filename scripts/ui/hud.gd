@@ -7,6 +7,8 @@ extends CanvasLayer
 @onready var rebound_bar: TextureProgressBar = $HUDPanel/VBoxBars/ReboundBar
 @onready var rebound_label: Label = $HUDPanel/VBoxBars/ReboundBar/ReboundLabel
 @onready var crystal_label: Label = $HUDPanel/HBoxCrystals/CrystalLabel
+@onready var death_label: Label = $HUDPanel/HBoxStats/DeathLabel if has_node("HUDPanel/HBoxStats/DeathLabel") else null
+@onready var respawn_label: Label = $HUDPanel/HBoxStats/RespawnLabel if has_node("HUDPanel/HBoxStats/RespawnLabel") else null
 
 # Abilities
 @onready var cd_fireball: TextureProgressBar = $AbilitiesBar/SlotFireball/CDProgress
@@ -47,6 +49,8 @@ func _ready() -> void:
 	GameManager.boss_spawned.connect(_on_boss_spawned)
 	GameManager.boss_health_changed.connect(_on_boss_hp_changed)
 	GameManager.boss_defeated.connect(_on_boss_defeated)
+	GameManager.death_count_changed.connect(_on_death_count_changed)
+	GameManager.respawn_count_changed.connect(_on_respawn_count_changed)
 
 	boss_container.visible = false
 	toast_label.visible = false
@@ -57,6 +61,7 @@ func _ready() -> void:
 	_on_mp_changed(GameManager.player_mp, GameManager.player_max_mp)
 	_on_rebound_changed(GameManager.rebound_meter, GameManager.MAX_REBOUND)
 	_on_crystals_changed(GameManager.crystals)
+	_update_death_respawn_labels()
 	_update_locks()
 
 func _process(_delta: float) -> void:
@@ -135,6 +140,18 @@ func _on_overdrive_ended() -> void:
 
 func _on_crystals_changed(count: int) -> void:
 	crystal_label.text = "x %d" % count
+
+func _on_death_count_changed(_count: int) -> void:
+	_update_death_respawn_labels()
+
+func _on_respawn_count_changed(_count: int) -> void:
+	_update_death_respawn_labels()
+
+func _update_death_respawn_labels() -> void:
+	if death_label:
+		death_label.text = "💀 Deaths: %d" % GameManager.death_count
+	if respawn_label:
+		respawn_label.text = "🔄 Respawns: %d" % GameManager.respawn_count
 
 func _on_power_unlocked(_p_name: String) -> void:
 	_update_locks()

@@ -155,6 +155,25 @@ text = "x 0"
 label_settings = SubResource("LabelSettings_crys")
 vertical_alignment = 1
 
+[node name="HBoxStats" type="HBoxContainer" parent="HUDPanel"]
+layout_mode = 0
+offset_top = 110.0
+offset_right = 240.0
+offset_bottom = 130.0
+theme_override_constants/separation = 12
+
+[node name="DeathLabel" type="Label" parent="HUDPanel/HBoxStats"]
+layout_mode = 2
+text = "💀 Deaths: 0"
+label_settings = SubResource("LabelSettings_bar")
+vertical_alignment = 1
+
+[node name="RespawnLabel" type="Label" parent="HUDPanel/HBoxStats"]
+layout_mode = 2
+text = "🔄 Respawns: 0"
+label_settings = SubResource("LabelSettings_bar")
+vertical_alignment = 1
+
 [node name="AbilitiesBar" type="HBoxContainer" parent="."]
 anchors_preset = 7
 anchor_left = 0.5

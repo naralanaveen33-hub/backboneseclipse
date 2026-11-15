@@ -1,7 +1,24 @@
 # 🧙‍♂️ MYSTIC REALMS: BOUNCE BACK
 ### The Power of Magic — 8 Levels & 8 Bosses Ultimate Edition
+**Created by Dhoni and Prathik**
 
-A complete, polished 2D fantasy action adventure platformer built in **Godot 4.x**, deeply integrating the Game Jam theme **"BOUNCE BACK"** across combat, platforming mobility, risk-reward loop, and progression. Features the epic anthem **"Lord of the Mysteries - Dark Dream" by Curley Gao**, 8 full playable levels, and 8 formidable boss encounters including the 50,000 HP Primordial Void Emperor with active multi-phase attacks!
+A complete, polished fantasy action adventure platformer built in **Godot 4.x**, deeply integrating the Game Jam theme **"BOUNCE BACK"** across combat, platforming mobility, risk-reward loop, and progression. Features a full 3D animated cinematic entry sequence, the epic anthem **"Lord of the Mysteries - Dark Dream" by Curley Gao**, 8 full playable levels, 8 formidable boss encounters (including the 50,000 HP Primordial Void Emperor with active multi-phase attacks!), and persistent death/respawn statistics!
+
+---
+
+## 🎬 3D Entry Animation & Credits
+- **Cinematic 3D Opening Splash Scene:** (`scenes/intro/intro_splash_3d.tscn`)
+  - Features real-time 3D graphics in Godot 4: a dynamic dolly-in `Camera3D`, glowing emissive celestial core, multi-axis spinning 3D rings (`TorusMesh`), orbiting crystal prisms, and floating stardust particles.
+  - **Bouncy Title Drop:** `"GAME: BOUNCE BACK"` drops in with an energetic 3D bounce-in easing curve (`Tween.TRANS_BACK, Tween.EASE_OUT`).
+  - **Creator Fanfare:** `"✦ CREATED BY DHONI AND PRATHIK ✦"` rises into 3D view in electric cyan with victory fanfare audio.
+  - Smooth skip/transition anytime on `[Space]`, `[Enter]`, or Click directly into the Main Menu.
+
+---
+
+## 💀 Persistent Death & Respawn Tracking System
+- **Real-Time HUD Counter:** Live display on the HUD (`💀 Deaths: X  |  🔄 Respawns: Y`) tracking the player's run.
+- **Game Over & Victory Screens:** Shows run death and respawn stats immediately when falling in battle or triumphing over the final emperor.
+- **Career Stats on Main Menu:** Overall career deaths and respawns persist seamlessly in `user://mystic_realms_save.json` across play sessions.
 
 ---
 
@@ -153,7 +170,7 @@ A complete, polished 2D fantasy action adventure platformer built in **Godot 4.x
 /Users/naralanaveen/Downloads/Godot.app/Contents/MacOS/Godot scenes/levels/level_1.tscn
 ```
 
-### Method 2: Run Automated In-Engine Test Suite (11/11 Suites 100% Pass)
+### Method 2: Run Automated In-Engine Test Suite (13/13 Suites 100% Pass)
 ```bash
 /Users/naralanaveen/Downloads/Godot.app/Contents/MacOS/Godot --headless scenes/tests/test_runner.tscn
 ```

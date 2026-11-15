@@ -19,6 +19,8 @@ signal rebound_changed(current_val: float, max_val: float)
 signal overdrive_started()
 signal overdrive_ended()
 signal floating_text_requested(text: String, pos: Vector2, color: Color)
+signal death_count_changed(count: int)
+signal respawn_count_changed(count: int)
 
 var player_hp: float = 250.0
 var player_max_hp: float = 250.0
@@ -29,6 +31,8 @@ var mana_regen_rate: float = 30.0
 var crystals: int = 0
 var current_level: int = 1
 var max_level_unlocked: int = 1
+var death_count: int = 0
+var respawn_count: int = 0
 
 # BOUNCE BACK: REBOUND & OVERDRIVE
 var rebound_meter: float = 0.0
@@ -279,6 +283,9 @@ func take_damage(amount: float) -> bool:
 	
 	if player_hp <= 0.0:
 		is_game_over = true
+		death_count += 1
+		death_count_changed.emit(death_count)
+		save_game()
 		player_died.emit()
 		SoundManager.play_sfx("death")
 	return true
@@ -325,6 +332,9 @@ func respawn_player() -> void:
 	is_game_over = false
 	shield_active = false
 	is_overdrive = false
+	respawn_count += 1
+	respawn_count_changed.emit(respawn_count)
+	save_game()
 	player_hp = player_max_hp
 	player_mp = player_max_mp
 	rebound_meter = 0.0
@@ -394,7 +404,9 @@ func save_game() -> void:
 	var data = {
 		"crystals": crystals,
 		"max_level_unlocked": max_level_unlocked,
-		"unlocked_powers": unlocked_powers
+		"unlocked_powers": unlocked_powers,
+		"death_count": death_count,
+		"respawn_count": respawn_count
 	}
 	var f = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if f:
@@ -413,6 +425,8 @@ func load_game() -> void:
 			var d = json.data
 			crystals = d.get("crystals", 0)
 			max_level_unlocked = d.get("max_level_unlocked", 1)
+			death_count = d.get("death_count", 0)
+			respawn_count = d.get("respawn_count", 0)
 			var p = d.get("unlocked_powers", {})
 			for k in p:
 				if unlocked_powers.has(k):

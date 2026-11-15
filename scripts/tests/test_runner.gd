@@ -194,7 +194,7 @@ func _ready() -> void:
 	print("  -> Player Ultimate Powers (Void Cannon, Shadow Step) & Animations verified OK.")
 
 	# Test 11: Secret Room & God Relic Shrine in Level 8
-	print("[TEST 11/11] Verifying Level 8 Secret Room, God Relic Shrine & Secret Wall...")
+	print("[TEST 11/13] Verifying Level 8 Secret Room, God Relic Shrine & Secret Wall...")
 	var shrine_res = load("res://scenes/objects/god_relic_shrine.tscn")
 	assert(shrine_res != null, "God Relic Shrine scene must exist")
 	var g_shrine = shrine_res.instantiate() as GodRelicShrine
@@ -218,7 +218,49 @@ func _ready() -> void:
 	secwall.queue_free()
 	print("  -> Secret Room God Relic Shrine (+1500 HP, +500 MP) and Secret Wall verified OK.")
 
+	# Test 12: 3D Entry Animation Scene & Credits
+	print("[TEST 12/13] Verifying 3D Entry Animation Scene (Dhoni & Prathik)...")
+	var intro_scene = load("res://scenes/intro/intro_splash_3d.tscn")
+	assert(intro_scene != null, "Intro splash 3D scene must exist")
+	var intro_inst = intro_scene.instantiate()
+	add_child(intro_inst)
+	assert(intro_inst.has_node("Camera3D"), "Intro must have a 3D Camera")
+	assert(intro_inst.has_node("CentralCore"), "Intro must have 3D CentralCore")
+	assert(intro_inst.has_node("Labels/TitleLabel3D"), "Intro must have TitleLabel3D")
+	assert(intro_inst.has_node("Labels/CreditLabel3D"), "Intro must have CreditLabel3D")
+	var title_node = intro_inst.get_node("Labels/TitleLabel3D") as Label3D
+	var credit_node = intro_inst.get_node("Labels/CreditLabel3D") as Label3D
+	assert("BOUNCE BACK" in title_node.text, "Title must contain 'BOUNCE BACK'")
+	assert("DHONI AND PRATHIK" in credit_node.text, "Credits must contain 'DHONI AND PRATHIK'")
+	intro_inst.queue_free()
+	print("  -> 3D Entry Animation ('GAME: BOUNCE BACK' by Dhoni and Prathik) verified OK.")
+
+	# Test 13: Death & Respawn Counter Tracking & Save Persistence
+	print("[TEST 13/13] Verifying Death & Respawn Counter System & Persistence...")
+	var initial_deaths = GameManager.death_count
+	var initial_respawns = GameManager.respawn_count
+	
+	# Simulate Death
+	GameManager.is_game_over = false
+	GameManager.is_invulnerable = false
+	GameManager.player_hp = 10.0
+	GameManager.take_damage(20.0) # Triggers fatal damage
+	assert(GameManager.death_count == initial_deaths + 1, "Death count must increment on fatal damage")
+	
+	# Simulate Respawn
+	GameManager.respawn_player()
+	assert(GameManager.respawn_count == initial_respawns + 1, "Respawn count must increment on respawn")
+	
+	# Save & Load Verification
+	GameManager.save_game()
+	GameManager.death_count = 0
+	GameManager.respawn_count = 0
+	GameManager.load_game()
+	assert(GameManager.death_count == initial_deaths + 1, "Death count must persist across save/load")
+	assert(GameManager.respawn_count == initial_respawns + 1, "Respawn count must persist across save/load")
+	print("  -> Death Count (%d) & Respawn Count (%d) tracking & persistence verified OK." % [GameManager.death_count, GameManager.respawn_count])
+
 	print("==================================================")
-	print("   ALL 11 ADVANCED TESTS PASSED 100%!            ")
+	print("   ALL 13 ADVANCED TESTS PASSED 100%!            ")
 	print("==================================================")
 	get_tree().quit(0)

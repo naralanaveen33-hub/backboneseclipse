@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Mystic Realms - The Power of Magic"
-run/main_scene="res://scenes/menus/main_menu.tscn"
+run/main_scene="res://scenes/intro/intro_splash_3d.tscn"
 config/custom_user_dir_name="MysticRealms"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://assets/ui/ability_fireball.png"

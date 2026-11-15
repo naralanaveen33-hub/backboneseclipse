@@ -84,6 +84,12 @@ text = "The dark magic has overwhelmed you..."
 label_settings = SubResource("LabelSettings_sub")
 horizontal_alignment = 1
 
+[node name="StatsLabel" type="Label" parent="Panel/NinePatchRect/VBox"]
+layout_mode = 2
+text = "💀 Deaths: 0  |  🔄 Respawns: 0"
+label_settings = SubResource("LabelSettings_sub")
+horizontal_alignment = 1
+
 [node name="RespawnBtn" type="TextureButton" parent="Panel/NinePatchRect/VBox"]
 custom_minimum_size = Vector2(180, 42)
 layout_mode = 2

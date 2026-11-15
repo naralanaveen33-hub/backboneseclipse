@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 @onready var panel: Control = $Panel
+@onready var stats_label: Label = $Panel/NinePatchRect/VBox/StatsLabel if has_node("Panel/NinePatchRect/VBox/StatsLabel") else null
 
 func _ready() -> void:
 	panel.visible = false
@@ -8,6 +9,8 @@ func _ready() -> void:
 	GameManager.player_respawned.connect(_on_player_respawned)
 
 func _on_player_died() -> void:
+	if stats_label:
+		stats_label.text = "💀 Deaths: %d  |  🔄 Respawns: %d" % [GameManager.death_count, GameManager.respawn_count]
 	await get_tree().create_timer(1.2).timeout
 	panel.visible = true
 	panel.modulate.a = 0.0
