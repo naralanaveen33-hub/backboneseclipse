@@ -82,6 +82,10 @@ A complete, polished 2D fantasy action adventure platformer built in **Godot 4.x
 
 ### 🌌👑 Level 8: The Primordial Singularity Core (THE ULTIMATE BOSS REALM)
 - **Atmosphere:** Cosmic Singularity with accretion disk, shattered galaxies, colossal dark monolith spires, floating obsidian ruin pillars with glowing runes.
+- **Secret Room — The Ancient Astral Sanctum:**
+  - Hidden behind a breakable cracked wall at high altitude ($X=1570, Y=180$).
+  - Features floating astral crystals and the legendary **God Relic Shrine**.
+  - Awakening the shrine bestows **$+1,500$ Max HP**, **$+500$ Max MP**, accelerated mana regeneration, **$+35\%$ movement speed**, **$+60\%$ damage**, **$+50\%$ Rebound meter rate**, and unlocks the player's ultimate abilities!
 - **The Ultimate Supreme Boss:** **PRIMORDIAL VOID EMPEROR MALAKOR** (**50,000 HP**)
 - **Dedicated Systems & 8 Core Ability Trees:**
   1. **Teleportation:** Instantly phases behind player for ambush combos; teleports randomly across the arena; dark vortex rifts with audio/visual feedback; dynamic cooldowns (3.5s $\to$ 1.0s).
@@ -107,6 +111,15 @@ A complete, polished 2D fantasy action adventure platformer built in **Godot 4.x
 
 ---
 
+## 🧙‍♂️ Enhanced Player Archmage & Ultimate Powers
+
+- **Custom Enhanced Sprite**: High-contrast, handcrafted dark hooded archmage character with ceremonial gold-trimmed robes and a wizard staff crowned by a glowing cosmic purple orb.
+- **Complete 32 Animation Frames Across 8 Sets**: `idle` (4f), `run` (6f), `jump` (2f), `fall` (2f), `attack` (4f), `hurt` (2f), `death` (6f), and `respawn` (6f).
+- **Astral Void Cannon `[E]`**: Fires a high-velocity celestial projectile dealing 650 base damage that pierces boss shields directly and ricochets up to 4 times ($+50\%$ damage per bounce). Features heavy rocket-jumping recoil.
+- **Chronos Shadow Step `[F]`**: 220 px spatial dash with directional aiming. Leaves motion-trail ghost duplicates (`BossGhostTrail`), erupts with teleport vortex bursts, grants invulnerability frames, and breaks active stuns instantly.
+
+---
+
 ## 🕹️ Controls
 
 | Control | Action | Effect |
@@ -118,6 +131,8 @@ A complete, polished 2D fantasy action adventure platformer built in **Godot 4.x
 | **K** | Ice Blast | Bouncing frost bolt that freezes enemies solid |
 | **L** | Lightning Strike | Thunder strike on forward enemies (95 dmg) |
 | **I** | Magic Shield | Protective rune dome negating all damage |
+| **E** | Astral Void Cannon | Celestial beam piercing shields with 4-wall ricochet ($+50\%$/bounce) |
+| **F** | Chronos Shadow Step | 220px spatial dash with invulnerability, ghost trail, and stun cleanse |
 | **Q** | Rebound Overdrive | Radial shockwave + 5s Rapid Fire & 5x Ricochet |
 | **R** | Restart Checkpoint | Respawn at active checkpoint |
 | **Esc** or **P** | Pause Menu | Resume, Restart, Level Select, Main Menu |
@@ -138,7 +153,7 @@ A complete, polished 2D fantasy action adventure platformer built in **Godot 4.x
 /Users/naralanaveen/Downloads/Godot.app/Contents/MacOS/Godot scenes/levels/level_1.tscn
 ```
 
-### Method 2: Run Automated In-Engine Test Suite (100% Pass)
+### Method 2: Run Automated In-Engine Test Suite (11/11 Suites 100% Pass)
 ```bash
 /Users/naralanaveen/Downloads/Godot.app/Contents/MacOS/Godot --headless scenes/tests/test_runner.tscn
 ```
