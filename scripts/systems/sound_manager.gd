@@ -45,10 +45,19 @@ func _load_audio_resources() -> void:
 	]
 	for sname in sfx_names:
 		var path = "res://assets/sounds/%s.wav" % sname
+		if not ResourceLoader.exists(path):
+			if ResourceLoader.exists("res://assets/sounds/%s.mp3" % sname):
+				path = "res://assets/sounds/%s.mp3" % sname
+			elif sname == "fireball" and ResourceLoader.exists("res://assets/sounds/floraphonic-fireball-whoosh-7-201453.mp3"):
+				path = "res://assets/sounds/floraphonic-fireball-whoosh-7-201453.mp3"
+			elif sname == "boss_roar" and ResourceLoader.exists("res://assets/sounds/new folder/boss_roar.wav"):
+				path = "res://assets/sounds/new folder/boss_roar.wav"
 		if ResourceLoader.exists(path):
 			var stream = load(path)
 			if stream is AudioStreamWAV:
 				stream.loop_mode = AudioStreamWAV.LOOP_DISABLED
+			elif stream is AudioStreamMP3:
+				stream.loop = false
 			sfx_streams[sname] = stream
 			
 	# Music streams

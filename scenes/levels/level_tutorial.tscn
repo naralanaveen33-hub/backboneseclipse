@@ -1,0 +1,294 @@
+[gd_scene load_steps=20 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/level_controller.gd" id="1_ctrl"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/forest/sky.png" id="2_sky"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/forest/mountains.png" id="3_mount"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/forest/trees_bg.png" id="4_trees_bg"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/forest/trees_fg.png" id="5_trees_fg"]
+[ext_resource type="Texture2D" path="res://assets/tiles/platform_forest_160.png" id="6_p160"]
+[ext_resource type="Texture2D" path="res://assets/tiles/platform_forest_80.png" id="7_p80"]
+[ext_resource type="Texture2D" path="res://assets/tiles/boss_barrier.png" id="8_barr"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="9_player"]
+[ext_resource type="PackedScene" path="res://scenes/objects/crystal.tscn" id="10_crys"]
+[ext_resource type="PackedScene" path="res://scenes/objects/checkpoint.tscn" id="11_chk"]
+[ext_resource type="PackedScene" path="res://scenes/objects/tutorial_sign.tscn" id="12_sign"]
+[ext_resource type="PackedScene" path="res://scenes/objects/level_portal.tscn" id="14_port"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="19_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="20_pmenu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_over_menu.tscn" id="21_gomenu"]
+[ext_resource type="PackedScene" path="res://scenes/objects/ruined_shrine.tscn" id="22_shrine"]
+
+[sub_resource type="RectangleShape2D" id="Shape_160"]
+size = Vector2(160, 32)
+
+[sub_resource type="RectangleShape2D" id="Shape_80"]
+size = Vector2(80, 24)
+
+[sub_resource type="RectangleShape2D" id="Shape_Barrier"]
+size = Vector2(32, 280)
+
+[node name="LevelTutorial" type="Node2D"]
+script = ExtResource("1_ctrl")
+level_number = 0
+music_track = "dark_dream"
+death_y = 650.0
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="LayerSky" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0, 0)
+motion_mirroring = Vector2(960, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/LayerSky"]
+texture = ExtResource("2_sky")
+centered = false
+
+[node name="LayerMountains" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.2, 0.05)
+motion_mirroring = Vector2(960, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/LayerMountains"]
+texture = ExtResource("3_mount")
+centered = false
+
+[node name="LayerTreesBG" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.45, 0.1)
+motion_mirroring = Vector2(960, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/LayerTreesBG"]
+texture = ExtResource("4_trees_bg")
+centered = false
+
+[node name="LayerTreesFG" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.75, 0.15)
+motion_mirroring = Vector2(960, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/LayerTreesFG"]
+texture = ExtResource("5_trees_fg")
+centered = false
+
+[node name="Platforms" type="Node2D" parent="."]
+
+[node name="Ground_0" type="StaticBody2D" parent="Platforms"]
+position = Vector2(80, 456)
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/Ground_0"]
+texture = ExtResource("6_p160")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Ground_0"]
+shape = SubResource("Shape_160")
+
+[node name="Ground_1" type="StaticBody2D" parent="Platforms"]
+position = Vector2(240, 456)
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/Ground_1"]
+texture = ExtResource("6_p160")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Ground_1"]
+shape = SubResource("Shape_160")
+
+[node name="HurdleStep" type="StaticBody2D" parent="Platforms"]
+position = Vector2(280, 416)
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/HurdleStep"]
+texture = ExtResource("7_p80")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/HurdleStep"]
+shape = SubResource("Shape_80")
+
+[node name="Ground_2" type="StaticBody2D" parent="Platforms"]
+position = Vector2(400, 456)
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/Ground_2"]
+texture = ExtResource("6_p160")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Ground_2"]
+shape = SubResource("Shape_160")
+
+[node name="Ground_3" type="StaticBody2D" parent="Platforms"]
+position = Vector2(560, 456)
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/Ground_3"]
+texture = ExtResource("6_p160")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Ground_3"]
+shape = SubResource("Shape_160")
+
+[node name="Ground_4" type="StaticBody2D" parent="Platforms"]
+position = Vector2(720, 456)
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/Ground_4"]
+texture = ExtResource("6_p160")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Ground_4"]
+shape = SubResource("Shape_160")
+
+[node name="Ground_5" type="StaticBody2D" parent="Platforms"]
+position = Vector2(880, 456)
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/Ground_5"]
+texture = ExtResource("6_p160")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Ground_5"]
+shape = SubResource("Shape_160")
+
+[node name="Ground_6" type="StaticBody2D" parent="Platforms"]
+position = Vector2(1040, 456)
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/Ground_6"]
+texture = ExtResource("6_p160")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Ground_6"]
+shape = SubResource("Shape_160")
+
+[node name="HighWallBarrier" type="StaticBody2D" parent="Platforms"]
+position = Vector2(1116, 320)
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/HighWallBarrier"]
+texture = ExtResource("8_barr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/HighWallBarrier"]
+shape = SubResource("Shape_Barrier")
+
+[node name="HighLedge_1" type="StaticBody2D" parent="Platforms"]
+position = Vector2(1200, 240)
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/HighLedge_1"]
+texture = ExtResource("6_p160")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/HighLedge_1"]
+shape = SubResource("Shape_160")
+
+[node name="HighLedge_2" type="StaticBody2D" parent="Platforms"]
+position = Vector2(1360, 240)
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/HighLedge_2"]
+texture = ExtResource("6_p160")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/HighLedge_2"]
+shape = SubResource("Shape_160")
+
+[node name="ChasmSafetyFloor" type="StaticBody2D" parent="Platforms"]
+position = Vector2(1580, 500)
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/ChasmSafetyFloor"]
+texture = ExtResource("6_p160")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/ChasmSafetyFloor"]
+shape = SubResource("Shape_160")
+
+[node name="ChasmSafetyReturnPad" type="StaticBody2D" parent="Platforms"]
+position = Vector2(1580, 370)
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/ChasmSafetyReturnPad"]
+texture = ExtResource("7_p80")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/ChasmSafetyReturnPad"]
+shape = SubResource("Shape_80")
+
+[node name="PostChasmPlatform_1" type="StaticBody2D" parent="Platforms"]
+position = Vector2(1800, 240)
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/PostChasmPlatform_1"]
+texture = ExtResource("6_p160")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/PostChasmPlatform_1"]
+shape = SubResource("Shape_160")
+
+[node name="PostChasmPlatform_2" type="StaticBody2D" parent="Platforms"]
+position = Vector2(1960, 240)
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/PostChasmPlatform_2"]
+texture = ExtResource("6_p160")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/PostChasmPlatform_2"]
+shape = SubResource("Shape_160")
+
+[node name="FinalPortalPlatform" type="StaticBody2D" parent="Platforms"]
+position = Vector2(2120, 240)
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/FinalPortalPlatform"]
+texture = ExtResource("6_p160")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/FinalPortalPlatform"]
+shape = SubResource("Shape_160")
+
+[node name="Sign1_Move" parent="." instance=ExtResource("12_sign")]
+position = Vector2(120, 420)
+message = "WELCOME TO THE TRAINING GROUNDS!\n[A] / [D] = Move Left & Right\n[Space] or [W] = Jump\nLeap over the stone step ahead!"
+
+[node name="Checkpoint1" parent="." instance=ExtResource("11_chk")]
+position = Vector2(460, 420)
+checkpoint_id = 1
+
+[node name="Sign2_Cast" parent="." instance=ExtResource("12_sign")]
+position = Vector2(520, 420)
+message = "CASTING & WALL RICOCHET:\nAim with your Mouse (or face your target)\n[Left-Click] or [J] = Cast Fireball!\nFireballs ricochet off walls for 2x & 3x DMG!\nHit the ancient stone shrine ahead!"
+
+[node name="RuinedShrine" parent="." instance=ExtResource("22_shrine")]
+position = Vector2(760, 410)
+stat_buff = "speed"
+
+[node name="Crystal_1" parent="." instance=ExtResource("10_crys")]
+position = Vector2(640, 390)
+
+[node name="Sign3_RocketJump" parent="." instance=ExtResource("12_sign")]
+position = Vector2(960, 420)
+message = "🚀 HIGH WALL! NORMAL JUMP CANNOT REACH!\n\n✨ HOW TO ROCKET JUMP (LAUNCH SKYWARD):\n1. Press [Space] to Jump into the air\n2. Aim mouse cursor BELOW your wizard (or hold [S])\n3. Cast Fireball [Left-Click] or [J]!\n\nThe downward explosion launches you sky-high!\n(Infinite Mana enabled — practice now!)"
+
+[node name="Checkpoint2_Ledge" parent="." instance=ExtResource("11_chk")]
+position = Vector2(1180, 204)
+checkpoint_id = 2
+
+[node name="Crystal_2" parent="." instance=ExtResource("10_crys")]
+position = Vector2(1260, 170)
+
+[node name="Sign4_ChasmBoost" parent="." instance=ExtResource("12_sign")]
+position = Vector2(1380, 204)
+message = "💨 CHASM AIR-BOOST:\nJump forward over the chasm, then shoot DOWNWARDS in mid-air!\nThe mid-air blast throws you forward & upward\nto clear massive chasms with ease!"
+
+[node name="Checkpoint3_Landed" parent="." instance=ExtResource("11_chk")]
+position = Vector2(1760, 204)
+checkpoint_id = 3
+
+[node name="Crystal_3" parent="." instance=ExtResource("10_crys")]
+position = Vector2(1960, 170)
+
+[node name="Crystal_4" parent="." instance=ExtResource("10_crys")]
+position = Vector2(2020, 160)
+
+[node name="Crystal_5" parent="." instance=ExtResource("10_crys")]
+position = Vector2(2080, 170)
+
+[node name="Sign5_Victory" parent="." instance=ExtResource("12_sign")]
+position = Vector2(1920, 204)
+message = "🏆 YOU HAVE MASTERED MAGICAL RECOIL!\nYou can rocket jump anytime in the adventure to evade bosses,\nclimb secret ledges, and soar across chasms!\nEnter the portal to begin Level 1!"
+
+[node name="LevelPortal" parent="." instance=ExtResource("14_port")]
+position = Vector2(2150, 204)
+requires_boss_defeat = false
+
+[node name="Player" parent="." instance=ExtResource("9_player")]
+position = Vector2(60, 410)
+
+[node name="HUD" parent="." instance=ExtResource("19_hud")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("20_pmenu")]
+
+[node name="GameOverMenu" parent="." instance=ExtResource("21_gomenu")]

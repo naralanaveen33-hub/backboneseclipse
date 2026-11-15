@@ -7,17 +7,20 @@
 [ext_resource type="Texture2D" uid="uid://y7pi2pwt6ngv" path="res://assets/ui/button_normal.png" id="5_btn"]
 [ext_resource type="Texture2D" uid="uid://f83yncgg4fcd" path="res://assets/ui/button_hover.png" id="6_hov"]
 [ext_resource type="Texture2D" uid="uid://cme586w5hhqh4" path="res://assets/ui/button_pressed.png" id="7_prs"]
+[ext_resource type="Font" path="res://assets/fonts/pixel_font_big.tres" id="8_pixelfontbig"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
-font_size = 42
+font = ExtResource("8_pixelfontbig")
+font_size = 36
 font_color = Color(1, 0.88, 0.45, 1)
-outline_size = 8
+outline_size = 6
 outline_color = Color(0.12, 0.06, 0.2, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_sub"]
-font_size = 18
+font = ExtResource("8_pixelfontbig")
+font_size = 16
 font_color = Color(0.6, 0.9, 1, 1)
-outline_size = 4
+outline_size = 3
 outline_color = Color(0.08, 0.04, 0.15, 1)
 
 [node name="MainMenu" type="Control" unique_id=476889161]
@@ -90,16 +93,16 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -100.0
-offset_top = -240.0
-offset_right = 100.0
-offset_bottom = -60.0
+offset_left = -110.0
+offset_top = -280.0
+offset_right = 110.0
+offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_constants/separation = 14
+theme_override_constants/separation = 12
 
 [node name="StartBtn" type="TextureButton" parent="VBoxButtons" unique_id=506167043]
-custom_minimum_size = Vector2(200, 44)
+custom_minimum_size = Vector2(220, 42)
 layout_mode = 2
 texture_normal = ExtResource("5_btn")
 texture_pressed = ExtResource("7_prs")
@@ -118,8 +121,28 @@ text = "Start Adventure"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="TutorialBtn" type="TextureButton" parent="VBoxButtons" unique_id=892341234]
+custom_minimum_size = Vector2(220, 42)
+layout_mode = 2
+texture_normal = ExtResource("5_btn")
+texture_pressed = ExtResource("7_prs")
+texture_hover = ExtResource("6_hov")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="VBoxButtons/TutorialBtn" unique_id=892341235]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Tutorial Grounds"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="LevelSelectBtn" type="TextureButton" parent="VBoxButtons" unique_id=560083781]
-custom_minimum_size = Vector2(200, 44)
+custom_minimum_size = Vector2(220, 42)
 layout_mode = 2
 texture_normal = ExtResource("5_btn")
 texture_pressed = ExtResource("7_prs")
@@ -139,7 +162,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="QuitBtn" type="TextureButton" parent="VBoxButtons" unique_id=1261945684]
-custom_minimum_size = Vector2(200, 44)
+custom_minimum_size = Vector2(220, 42)
 layout_mode = 2
 texture_normal = ExtResource("5_btn")
 texture_pressed = ExtResource("7_prs")
@@ -159,5 +182,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [connection signal="pressed" from="VBoxButtons/StartBtn" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="VBoxButtons/TutorialBtn" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="VBoxButtons/LevelSelectBtn" to="." method="_on_level_select_pressed"]
 [connection signal="pressed" from="VBoxButtons/QuitBtn" to="." method="_on_quit_pressed"]

@@ -11,6 +11,8 @@ signal boss_spawned(boss_name: String, max_hp: float)
 signal boss_health_changed(current_hp: float, max_hp: float)
 signal boss_defeated()
 signal notification_posted(text: String)
+signal tutorial_posted(text: String)
+signal tutorial_cleared()
 
 # Bounce Back Jam Signals
 signal rebound_changed(current_val: float, max_val: float)
@@ -149,6 +151,14 @@ func start_level(level_num: int) -> void:
 	rebound_meter = 0.0
 	is_overdrive = false
 	
+	if level_num == 0:
+		unlocked_powers["fireball"] = true
+		unlocked_powers["ice_blast"] = true
+		unlocked_powers["lightning"] = true
+		unlocked_powers["shield"] = true
+		get_tree().change_scene_to_file("res://scenes/levels/level_tutorial.tscn")
+		return
+
 	if level_num >= 2:
 		unlocked_powers["lightning"] = true
 		unlocked_powers["shield"] = true
@@ -284,6 +294,12 @@ func unlock_power(power_name: String) -> void:
 func post_notification(text: String) -> void:
 	notification_posted.emit(text)
 
+func post_tutorial(text: String) -> void:
+	tutorial_posted.emit(text)
+
+func hide_tutorial() -> void:
+	tutorial_cleared.emit()
+
 func respawn_player() -> void:
 	is_game_over = false
 	shield_active = false
@@ -298,7 +314,11 @@ func respawn_player() -> void:
 	SoundManager.play_sfx("respawn")
 
 func complete_level() -> void:
-	if current_level == 1:
+	if current_level == 0:
+		post_notification("Tutorial Complete! Entering Level 1: The Enchanted Forest...")
+		await get_tree().create_timer(1.6).timeout
+		start_level(1)
+	elif current_level == 1:
 		max_level_unlocked = max(max_level_unlocked, 2)
 		unlock_power("lightning")
 		unlock_power("shield")

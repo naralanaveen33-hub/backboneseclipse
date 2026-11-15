@@ -1,24 +1,19 @@
 [remap]
 
-importer="wav"
-type="AudioStreamWAV"
-uid="uid://bia5kx3k4axkm"
-path="res://.godot/imported/death.wav-75b3b960b42f4ac0e66fdefe9fd48ee1.sample"
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dpwfbihwkd6rt"
+path="res://.godot/imported/death.wav-75b3b960b42f4ac0e66fdefe9fd48ee1.mp3str"
 
 [deps]
 
 source_file="res://assets/sounds/death.wav"
-dest_files=["res://.godot/imported/death.wav-75b3b960b42f4ac0e66fdefe9fd48ee1.sample"]
+dest_files=["res://.godot/imported/death.wav-75b3b960b42f4ac0e66fdefe9fd48ee1.mp3str"]
 
 [params]
 
-force/8_bit=false
-force/mono=false
-force/max_rate=false
-force/max_rate_hz=44100
-edit/trim=false
-edit/normalize=false
-edit/loop_mode=0
-edit/loop_begin=0
-edit/loop_end=-1
-compress/mode=2
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

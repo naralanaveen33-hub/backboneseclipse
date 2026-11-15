@@ -24,6 +24,8 @@ extends CanvasLayer
 
 # Toast
 @onready var toast_label: Label = $ToastLabel
+@onready var tutorial_box: Control = $TutorialBox if has_node("TutorialBox") else null
+@onready var tutorial_message: Label = $TutorialBox/VBox/Message if has_node("TutorialBox/VBox/Message") else null
 
 var player_ref: Player = null
 
@@ -36,12 +38,16 @@ func _ready() -> void:
 	GameManager.crystals_changed.connect(_on_crystals_changed)
 	GameManager.power_unlocked.connect(_on_power_unlocked)
 	GameManager.notification_posted.connect(_on_notification)
+	GameManager.tutorial_posted.connect(_on_tutorial_posted)
+	GameManager.tutorial_cleared.connect(_on_tutorial_cleared)
 	GameManager.boss_spawned.connect(_on_boss_spawned)
 	GameManager.boss_health_changed.connect(_on_boss_hp_changed)
 	GameManager.boss_defeated.connect(_on_boss_defeated)
 
 	boss_container.visible = false
 	toast_label.visible = false
+	if tutorial_box:
+		tutorial_box.visible = false
 	
 	_on_hp_changed(GameManager.player_hp, GameManager.player_max_hp)
 	_on_mp_changed(GameManager.player_mp, GameManager.player_max_mp)
@@ -137,3 +143,19 @@ func _on_notification(text: String) -> void:
 	tween.tween_property(toast_label, "modulate:a", 0.0, 0.5)
 	await tween.finished
 	toast_label.visible = false
+
+func _on_tutorial_posted(text: String) -> void:
+	if tutorial_box and tutorial_message:
+		tutorial_message.text = text
+		tutorial_box.visible = true
+		tutorial_box.modulate.a = 0.0
+		var tween = create_tween()
+		tween.tween_property(tutorial_box, "modulate:a", 1.0, 0.2)
+
+func _on_tutorial_cleared() -> void:
+	if tutorial_box and tutorial_box.visible:
+		var tween = create_tween()
+		tween.tween_property(tutorial_box, "modulate:a", 0.0, 0.2)
+		await tween.finished
+		if is_instance_valid(tutorial_box):
+			tutorial_box.visible = false

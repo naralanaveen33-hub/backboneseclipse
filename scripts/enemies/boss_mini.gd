@@ -13,7 +13,7 @@ signal boss_died()
 
 func _ready() -> void:
 	max_hp = 800.0
-	damage = 30.0
+	damage = 100.0
 	speed = 75.0
 	crystals_dropped = 12
 	super._ready()
@@ -121,6 +121,7 @@ func _attack_charge(player: Node2D) -> void:
 	anim.play("idle")
 	var charge_dir = facing
 	var charge_duration = 0.10
+
 
 	
 	while charge_duration > 0 and not is_dead and not is_frozen:

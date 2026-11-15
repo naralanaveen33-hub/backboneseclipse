@@ -50,6 +50,7 @@ func _show_bounce_back_intro() -> void:
 	canvas.add_child(vbox)
 	
 	var titles = {
+		0: "✨ TUTORIAL: THE TRAINING GROUNDS ✨",
 		1: "⚡ BOUNCE BACK: FROM ASHES TO POWER (LEVEL 1) ⚡",
 		2: "⚡ BOUNCE BACK: THE DARK CASTLE (LEVEL 2) ⚡",
 		3: "⚡ BOUNCE BACK: THE MOLTEN CAVERNS (LEVEL 3) ⚡",
@@ -61,6 +62,7 @@ func _show_bounce_back_intro() -> void:
 	}
 	
 	var missions = {
+		0: "Welcome Wizard! Follow the tutorial signs to master movement,\nricochet fireball casting, timed parry, and rocket jumping!",
 		1: "Stripped of your legendary relics by the Abyssal Overlord...\nAwaken from the lowest abyss and fight back to the surface!",
 		2: "Infiltrate the Dark Castle and confront the Dark Wizard - Lord of Shadows!\nBeware of molten lava pits and hidden spike traps.",
 		3: "Descend into the Molten Inferno and defeat the Infernal Magma Titan!\nSurvive deadly lava geysers and burning magma orbs.",
@@ -72,6 +74,7 @@ func _show_bounce_back_intro() -> void:
 	}
 	
 	var tips = {
+		0: "TUTORIAL: Read each sign ahead! Aim downward with mouse or [S] to Rocket-Jump!",
 		1: "THEME TIP: Fireballs ricochet off walls (1x->2x->3x DMG)! Right-Click / [Shift] to Parry!",
 		2: "THEME TIP: Timed Parry deflects dark orbs at 3x speed & stun! Awaken Ruined Shrines for buffs!",
 		3: "THEME TIP: Aim downward with mouse or hold [S] to Rocket-Jump over bottomless lava pits!",

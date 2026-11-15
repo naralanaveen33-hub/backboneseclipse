@@ -24,13 +24,15 @@ config/icon="res://assets/ui/ability_fireball.png"
 
 GameManager="*res://scripts/systems/game_manager.gd"
 SoundManager="*res://scripts/systems/sound_manager.gd"
+ScreenShake="*res://scripts/ui/screen_shake.gd"
+ScreenFlash="*res://scripts/ui/screen_flash.gd"
 
 [display]
 
-window/size/viewport_width=960
-window/size/viewport_height=540
-window/size/window_width_override=1280
-window/size/window_height_override=720
+window/size/viewport_width=1366
+window/size/viewport_height=768
+window/size/window_width_override=1366
+window/size/window_height_override=768
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 

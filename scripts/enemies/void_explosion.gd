@@ -38,7 +38,7 @@ func _detonate() -> void:
 	# Blast surge
 	var blast_tween = create_tween()
 	sprite.modulate = Color(2.0, 0.4, 0.8, 1.0)
-	blast_tween.tween_property(sprite, "scale", Vector2(2.2, 2.2), 0.22)
+	blast_tween.tween_property(sprite, "scale", Vector2(2.0, 2.0), 0.22)
 	blast_tween.parallel().tween_property(sprite, "modulate:a", 0.0, 0.25)
 	
 	# Check bodies in radius

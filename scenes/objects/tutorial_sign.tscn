@@ -4,13 +4,13 @@
 [ext_resource type="Texture2D" path="res://assets/tiles/tutorial_sign.png" id="2_tex"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_col"]
-radius = 48.0
+radius = 80.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_sign"]
-font_size = 12
-font_color = Color(1, 0.95, 0.8, 1)
-outline_size = 3
-outline_color = Color(0.1, 0.08, 0.15, 1)
+font_size = 11
+font_color = Color(1, 0.96, 0.82, 1)
+outline_size = 4
+outline_color = Color(0.06, 0.04, 0.12, 0.95)
 
 [node name="TutorialSign" type="Area2D"]
 collision_layer = 32
@@ -23,11 +23,19 @@ texture = ExtResource("2_tex")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_col")
 
+[node name="Panel" type="ColorRect" parent="."]
+visible = false
+offset_left = -170.0
+offset_top = -140.0
+offset_right = 170.0
+offset_bottom = -14.0
+color = Color(0.04, 0.03, 0.09, 0.88)
+
 [node name="Label" type="Label" parent="."]
-offset_left = -120.0
-offset_top = -42.0
-offset_right = 120.0
-offset_bottom = -16.0
+offset_left = -165.0
+offset_top = -136.0
+offset_right = 165.0
+offset_bottom = -18.0
 label_settings = SubResource("LabelSettings_sign")
 horizontal_alignment = 1
 vertical_alignment = 1

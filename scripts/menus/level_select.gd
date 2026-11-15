@@ -3,6 +3,10 @@ extends Control
 func _ready() -> void:
 	SoundManager.play_music("dark_dream")
 
+func _on_tutorial_pressed() -> void:
+	SoundManager.play_sfx("click")
+	GameManager.start_level(0)
+
 func _on_level_1_pressed() -> void:
 	SoundManager.play_sfx("click")
 	GameManager.start_level(1)
