@@ -34,10 +34,10 @@ var current_state: BossState = BossState.IDLE
 var is_active: bool = false
 var phase: int = 1
 
-# Phase thresholds (50,000 Max HP)
-const PHASE_2_HP: float = 37500.0 # 75%
-const PHASE_3_HP: float = 25000.0 # 50%
-const PHASE_4_HP: float = 10000.0 # 20%
+# Phase thresholds (10,000 Max HP)
+const PHASE_2_HP: float = 7500.0 # 75%
+const PHASE_3_HP: float = 5000.0 # 50%
+const PHASE_4_HP: float = 2500.0 # 25%
 
 # ------------------------------------------------------------------------------
 # 3. MOVEMENT & STAT ATTRIBUTES
@@ -103,8 +103,8 @@ var boss_ui: BossHealthBarUI = null
 # 7. INITIALIZATION & SETUP
 # ------------------------------------------------------------------------------
 func _ready() -> void:
-	max_hp = 50000.0
-	hp = 50000.0
+	max_hp = 10000.0
+	hp = 10000.0
 	damage = 35.0
 	speed = base_move_speed
 	crystals_dropped = 200
@@ -131,7 +131,7 @@ func activate_boss() -> void:
 	SoundManager.play_sfx("boss_roar")
 	SoundManager.play_music("dark_dream")
 	GameManager.boss_spawned.emit(boss_name, max_hp)
-	GameManager.post_notification("⚡ THE PRIMORDIAL VOID EMPEROR HAS AWAKENED! 50,000 HP ⚡")
+	GameManager.post_notification("⚡ THE PRIMORDIAL VOID EMPEROR HAS AWAKENED! 10,000 HP ⚡")
 
 # ------------------------------------------------------------------------------
 # 8. MAIN PHYSICS PROCESS & INTELLIGENT AI LOOP
@@ -550,11 +550,11 @@ func regenerate_health() -> void:
 	SoundManager.play_sfx("freeze")
 	GameManager.pop_floating_text("DARK REGENERATION!", global_position + Vector2(0, -55), Color(0.3, 1.0, 0.4))
 	
-	# Heal 1,200 HP x 3 ticks = 3,600 HP
+	# Heal 350 HP x 3 ticks = 1,050 HP
 	for i in range(3):
 		await get_tree().create_timer(0.8).timeout
 		if is_dead or current_state != BossState.REGENERATING: break
-		var heal_amount = 1200.0
+		var heal_amount = 350.0
 		hp = minf(max_hp, hp + heal_amount)
 		boss_ui.update_hp(hp, max_hp)
 		GameManager.boss_health_changed.emit(hp, max_hp)

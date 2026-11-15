@@ -117,19 +117,19 @@ func _ready() -> void:
 		add_child(b_inst)
 		assert(b_inst.max_hp > 400.0, "%s must have upgraded boss HP" % b_name)
 		if b_name.begins_with("Level 8"):
-			assert(b_inst.max_hp == 50000.0, "Ultimate Boss must have exactly 50,000 HP")
+			assert(b_inst.max_hp == 10000.0, "Ultimate Boss must have exactly 10,000 HP")
 			assert(b_inst.phase == 1, "Boss starts in Phase 1")
 			b_inst.activate_boss()
 			assert(b_inst.is_active == true, "Ultimate Boss must activate")
 			# Verify Phase Transitions
-			b_inst.take_damage(13000.0) # Down to 37,000 HP
-			assert(b_inst.phase == 2, "Boss must transition to Phase 2 at <37,500 HP")
-			b_inst.take_damage(13000.0) # Down to 24,000 HP -> Transitions to Phase 3 and activates shield!
-			assert(b_inst.phase == 3, "Boss must transition to Phase 3 at <25,000 HP")
+			b_inst.take_damage(2600.0) # Down to 7,400 HP
+			assert(b_inst.phase == 2, "Boss must transition to Phase 2 at <7,500 HP")
+			b_inst.take_damage(2600.0) # Down to 4,800 HP -> Transitions to Phase 3 and activates shield!
+			assert(b_inst.phase == 3, "Boss must transition to Phase 3 at <5,000 HP")
 			assert(b_inst.active_shield_instance != null, "Protective shield active in Phase 3")
-			b_inst.take_damage(3000.0) # Shatters the 2,500 HP shield!
-			b_inst.take_damage(15000.0) # Hits boss down to 9,000 HP -> Transitions to Phase 4 Rage Mode!
-			assert(b_inst.phase == 4, "Boss must transition to Phase 4 Rage Mode at <10,000 HP")
+			b_inst.take_damage(1200.0) # Shatters the 1,000 HP shield!
+			b_inst.take_damage(2500.0) # Hits boss down to 2,300 HP -> Transitions to Phase 4 Rage Mode!
+			assert(b_inst.phase == 4, "Boss must transition to Phase 4 Rage Mode at <2,500 HP")
 		elif b_inst.has_method("activate_boss"):
 			b_inst.activate_boss()
 			assert(b_inst.is_active == true, "%s must activate properly" % b_name)

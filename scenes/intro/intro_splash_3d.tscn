@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3]
+[gd_scene load_steps=23 format=3]
 
 [ext_resource type="Script" path="res://scripts/intro/intro_splash_3d.gd" id="1_script"]
 [ext_resource type="Font" path="res://assets/fonts/cinematic_black.ttf" id="2_blackfont"]
@@ -7,23 +7,25 @@
 
 [sub_resource type="Environment" id="Environment_intro"]
 background_mode = 1
-background_color = Color(0.025, 0.012, 0.05, 1)
-ambient_light_color = Color(0.25, 0.15, 0.35, 1)
+background_color = Color(0.015, 0.008, 0.025, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.2, 0.12, 0.3, 1)
+ambient_light_energy = 0.0
 glow_enabled = true
-glow_intensity = 0.9
-glow_bloom = 0.28
+glow_intensity = 0.92
+glow_bloom = 0.26
 glow_blend_mode = 0
 
 [sub_resource type="StandardMaterial3D" id="Mat_Stage"]
-albedo_color = Color(0.12, 0.08, 0.18, 1)
-metallic = 0.8
-roughness = 0.25
+albedo_color = Color(0.08, 0.05, 0.12, 1)
+metallic = 0.85
+roughness = 0.2
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_stage"]
 material = SubResource("Mat_Stage")
-top_radius = 1.3
-bottom_radius = 1.45
-height = 0.2
+top_radius = 1.35
+bottom_radius = 1.5
+height = 0.22
 
 [sub_resource type="StandardMaterial3D" id="Mat_StageRim"]
 albedo_color = Color(0.4, 0.85, 1, 1)
@@ -34,8 +36,8 @@ roughness = 0.15
 
 [sub_resource type="TorusMesh" id="TorusMesh_stagerim"]
 material = SubResource("Mat_StageRim")
-inner_radius = 1.25
-outer_radius = 1.35
+inner_radius = 1.3
+outer_radius = 1.4
 
 [sub_resource type="StandardMaterial3D" id="Mat_Core"]
 albedo_color = Color(1, 0.85, 0.3, 1)
@@ -101,18 +103,25 @@ environment = SubResource("Environment_intro")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 2.5, 3.5, 3.0)
 light_color = Color(0.88, 0.75, 1, 1)
-light_energy = 0.85
+light_energy = 0.0
+
+[node name="OverheadSpotlight" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 0, 4.5, 0.8)
+light_color = Color(0.7, 0.9, 1, 1)
+light_energy = 0.0
+spot_range = 10.0
+spot_angle = 38.0
 
 [node name="OmniLightPulsing" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.4)
 light_color = Color(0.4, 0.85, 1, 1)
-light_energy = 1.6
+light_energy = 0.0
 omni_range = 9.0
 
 [node name="OmniLightGold" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, -0.5, 2.0)
 light_color = Color(1, 0.82, 0.28, 1)
-light_energy = 1.2
+light_energy = 0.0
 omni_range = 7.0
 
 [node name="Camera3D" type="Camera3D" parent="."]
@@ -139,9 +148,9 @@ animation = &"idle"
 
 [node name="WandLight" type="OmniLight3D" parent="Stage"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.95, 0.2)
-light_color = Color(0.75, 0.3, 1, 1)
-light_energy = 2.0
-omni_range = 3.5
+light_color = Color(0.8, 0.25, 1, 1)
+light_energy = 2.5
+omni_range = 3.8
 
 [node name="CentralCore" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -1.2)
@@ -176,7 +185,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, -2.4)
 mesh = SubResource("PrismMesh_crystal")
 
 [node name="StardustParticles" type="CPUParticles3D" parent="."]
-amount = 100
+amount = 120
 lifetime = 4.5
 mesh = SubResource("QuadMesh_particle")
 emission_shape = 3
@@ -193,52 +202,80 @@ scale_amount_max = 2.5
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.0)
 
 [node name="SubtitleLabel3D" type="Label3D" parent="Labels"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, 0)
 billboard = 1
 texture_filter = 3
-text = "✦ MYSTIC REALMS • AN EPIC BOUNCE BACK ADVENTURE ✦"
+text = "✦ MYSTIC REALMS • THE POWER OF MAGIC ✦"
 font = ExtResource("3_boldfont")
 font_size = 32
 pixel_size = 0.0035
 outline_size = 12
 outline_render_priority = 2
 render_priority = 3
-modulate = Color(0.9, 0.7, 1, 1)
+modulate = Color(0.92, 0.75, 1, 1)
 outline_modulate = Color(0.04, 0.01, 0.08, 1)
 
 [node name="TitleLabel3D" type="Label3D" parent="Labels"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 billboard = 1
 texture_filter = 3
 text = "GAME: BOUNCE BACK"
 font = ExtResource("2_blackfont")
-font_size = 72
+font_size = 76
 pixel_size = 0.0035
-outline_size = 20
+outline_size = 24
 outline_render_priority = 2
 render_priority = 3
 modulate = Color(1, 0.88, 0.35, 1)
 outline_modulate = Color(0.06, 0.02, 0.1, 1)
 
+[node name="DeveloperHeaderLabel3D" type="Label3D" parent="Labels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.38, 0)
+billboard = 1
+texture_filter = 3
+text = "★ GAME DEVELOPERS ★"
+font = ExtResource("3_boldfont")
+font_size = 32
+pixel_size = 0.0035
+outline_size = 14
+outline_render_priority = 2
+render_priority = 3
+modulate = Color(1, 0.85, 0.25, 1)
+outline_modulate = Color(0.08, 0.04, 0.01, 1)
+
+[node name="DeveloperNameLabel3D" type="Label3D" parent="Labels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.68, 0)
+billboard = 1
+texture_filter = 3
+text = "DHONI & PRATHIK"
+font = ExtResource("2_blackfont")
+font_size = 60
+pixel_size = 0.0035
+outline_size = 24
+outline_render_priority = 2
+render_priority = 3
+modulate = Color(0.3, 0.95, 1, 1)
+outline_modulate = Color(0.02, 0.05, 0.15, 1)
+
 [node name="CreditLabel3D" type="Label3D" parent="Labels"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.65, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.02, 0)
 billboard = 1
 texture_filter = 3
 text = "✦ CREATED BY DHONI AND PRATHIK ✦"
 font = ExtResource("2_blackfont")
-font_size = 42
+font_size = 36
 pixel_size = 0.0035
-outline_size = 16
+outline_size = 14
 outline_render_priority = 2
 render_priority = 3
-modulate = Color(0.35, 0.95, 1, 1)
-outline_modulate = Color(0.03, 0.06, 0.15, 1)
+modulate = Color(0.85, 0.95, 1, 1)
+outline_modulate = Color(0.03, 0.05, 0.12, 1)
 
 [node name="FeatureLabel3D" type="Label3D" parent="Labels"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.05, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.35, 0)
 billboard = 1
 texture_filter = 3
-text = "8 FORMISTABLE REALMS • 50,000 HP ULTIMATE BOSS • SECRET SANCTUM"
+text = "8 FORMIDABLE REALMS • 10,000 HP ULTIMATE BOSS • SECRET SANCTUM"
 font = ExtResource("3_boldfont")
 font_size = 22
 pixel_size = 0.0035
@@ -249,7 +286,7 @@ modulate = Color(0.85, 0.9, 1, 0.9)
 outline_modulate = Color(0.02, 0.03, 0.08, 1)
 
 [node name="PromptLabel3D" type="Label3D" parent="Labels"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.72, 0)
 billboard = 1
 texture_filter = 3
 text = "[ PRESS SPACE / ENTER / CLICK TO PLAY ]"
@@ -272,4 +309,4 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.02, 0.01, 0.04, 1)
+color = Color(0.015, 0.008, 0.025, 1)

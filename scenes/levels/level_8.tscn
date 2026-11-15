@@ -496,7 +496,7 @@ position = Vector2(1770, 140)
 
 [node name="Sign_0" parent="." instance=ExtResource("12_sign")]
 position = Vector2(140, 420)
-message = "👑 THE PRIMORDIAL SINGULARITY CORE (LEVEL 8) 👑\nThe Ultimate Void Sovereign Malakor awaits ahead with 50,000 HP!"
+message = "👑 THE PRIMORDIAL SINGULARITY CORE (LEVEL 8) 👑\nThe Ultimate Void Sovereign Malakor awaits ahead with 10,000 HP!"
 
 [node name="Sign_1" parent="." instance=ExtResource("12_sign")]
 position = Vector2(980, 420)

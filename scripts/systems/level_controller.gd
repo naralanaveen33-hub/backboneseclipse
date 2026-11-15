@@ -70,7 +70,7 @@ func _show_bounce_back_intro() -> void:
 		5: "Ascend the electric heights of the Tempest Spire and conquer the Storm Thunder Archon!\nRide the thunder gale.",
 		6: "Enter the cosmic Sanctum of the Mysteries and defeat the Celestial Void Monarch!\nDimensions unravel around you.",
 		7: "THE SUPREME FINAL SHOWDOWN! Defeat Abyssal Overlord Malakor\nand reclaim the Stolen Celestial Relic once and for all!",
-		8: "THE TRUE COSMIC APOCALYPSE! Confront Primordial Void Emperor Malakor!\n50,000 HP • 4 Multi-Phase Transformations • Supersonic Dashes • Stun Waves • Ultimate Rage Mode!"
+		8: "THE TRUE COSMIC APOCALYPSE! Confront Primordial Void Emperor Malakor!\n10,000 HP • 4 Multi-Phase Transformations • Supersonic Dashes • Stun Waves • Ultimate Rage Mode!"
 	}
 	
 	var tips = {

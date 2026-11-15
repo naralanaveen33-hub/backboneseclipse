@@ -167,7 +167,7 @@ position = Vector2(1770, 140)
 
     # Signs
     signs = [
-        (140, 420, "👑 THE PRIMORDIAL SINGULARITY CORE (LEVEL 8) 👑\\nThe Ultimate Void Sovereign Malakor awaits ahead with 50,000 HP!"),
+        (140, 420, "👑 THE PRIMORDIAL SINGULARITY CORE (LEVEL 8) 👑\\nThe Ultimate Void Sovereign Malakor awaits ahead with 10,000 HP!"),
         (980, 420, "TIP: Deflect his Dark Energy Balls with Timed Parry! Rocket-Jump over Ground Waves! Crack his Shield!"),
         (1670, 140, "✦ THE ANCIENT ASTRAL SANCTUM (SECRET ROOM) ✦\\nAwaken the God Relic Shrine! Grants +1,500 HP, +500 MP, and Unlocks Astral Void Cannon [E] & Chronos Shadow Step [F]!"),
         (1940, 420, "CAUTION: BEYOND THIS GATE LIES THE 4-PHASE APOCALYPSE! PREPARE YOUR OVERDRIVE!")

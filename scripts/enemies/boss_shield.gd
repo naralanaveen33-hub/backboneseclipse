@@ -1,7 +1,7 @@
 extends Area2D
 
-@export var max_shield_hp: float = 2500.0
-var shield_hp: float = 2500.0
+@export var max_shield_hp: float = 1000.0
+var shield_hp: float = 1000.0
 var duration: float = 8.0
 
 @onready var sprite: Sprite2D = $Sprite2D

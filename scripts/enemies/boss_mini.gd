@@ -13,7 +13,7 @@ signal boss_died()
 
 func _ready() -> void:
 	max_hp = 800.0
-	damage = 100.0
+	damage = 200.0
 	speed = 75.0
 	crystals_dropped = 12
 	super._ready()

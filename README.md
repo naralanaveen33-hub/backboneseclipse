@@ -2,21 +2,31 @@
 ### The Power of Magic — 8 Levels & 8 Bosses Ultimate Edition
 **Created by Dhoni and Prathik**
 
-A complete, polished fantasy action adventure platformer built in **Godot 4.x**, deeply integrating the Game Jam theme **"BOUNCE BACK"** across combat, platforming mobility, risk-reward loop, and progression. Features a full 3D animated cinematic entry sequence, the epic anthem **"Lord of the Mysteries - Dark Dream" by Curley Gao**, 8 full playable levels, 8 formidable boss encounters (including the 50,000 HP Primordial Void Emperor with active multi-phase attacks!), and persistent death/respawn statistics!
+A complete, polished fantasy action adventure platformer built in **Godot 4.x**, deeply integrating the Game Jam theme **"BOUNCE BACK"** across combat, platforming mobility, risk-reward loop, and progression. Features a full realistic 30-second dark-to-light 3D animated cinematic entry sequence, prominent developer showcase for **Dhoni & Prathik**, the epic anthem **"Lord of the Mysteries - Dark Dream" by Curley Gao**, 8 full playable levels, 8 formidable boss encounters (including the rebalanced 10,000 HP Primordial Void Emperor with active multi-phase attacks!), and persistent death/respawn statistics!
 
 ---
 
-## 🎬 3D Entry Animation & Credits
-- **Cinematic 3D Opening Scene (20-Second Choreographed Showcase):** (`scenes/intro/intro_splash_3d.tscn`)
-  - **Player Wand Dance & Spell Shooting**: Center stage on an obsidian and runic marble dais, the hooded archmage dances rhythmically with the wand—performing footwork steps, 360° pirouette spins, leaps, and wand flourishes.
-  - **3D Spell Projectiles & Ricochets**: While dancing, the player shoots dynamic bouncing spell volleys (solar fireballs, glacial ice bolts, gold bursts, and upward Astral Void beams) that ricochet in 3D off celestial rings with pitch-escalating crystalline chimes and fireworks.
-  - **Crystal Clear Typography**: Uses high-definition TrueType vector fonts (`cinematic_black.ttf` & `cinematic_bold.ttf`) with deep contrast outlines, linear mipmap filtering, and billboard rendering for maximum readability.
-  - **Choreographed Reveals**:
-    - **0s–5s**: Dance step footwork & initial spell volleys; reveals `✦ MYSTIC REALMS ✦`.
-    - **5s–11s**: Air-dance pirouette jump & 4-way cross-volley ricochets; massive bounce drop of `GAME: BOUNCE BACK`.
-    - **11s–16s**: Skyward Astral Void beam; reveals `✦ CREATED BY DHONI AND PRATHIK ✦` in electric cyan with fanfare.
-    - **16s–20s**: Triumphant golden staff victory pose and clear interactive prompt `[ PRESS SPACE / ENTER / CLICK TO PLAY ]`.
-  - Smooth skip/transition anytime on `[Space]`, `[Enter]`, or Click directly into the Main Menu.
+## 🎬 3D Entry Animation & Credits (Realistic Dark-to-Light 30s Sequence)
+- **Cinematic 3D Opening Scene (~30-Second Choreographed Showcase):** (`scenes/intro/intro_splash_3d.tscn`)
+  - **Dynamic Progressive Lighting Transition:**
+    - Begins in pure mysterious pitch darkness where only the purple orb on the archmage's staff casts mystical point light on his silhouette.
+    - Progressively brightens through overhead stage spotlights and soft ambient illumination as the wizard taps the ground.
+    - Fully illuminates into a brilliant realistic 3D arena with metallic reflections on celestial rings, marble dais highlights, and dramatic cosmic rim lighting.
+  - **Player Wand Dance & Spell Shooting Choreography:**
+    - Hooded archmage performs rhythmic dancing steps, 360° pirouette spins, leaps, and wand flourishes.
+    - Fires dynamic bouncing spell volleys (solar fireballs, ice bolts, cross-volley ricochets, and skyward Astral Void beams) that reflect in 3D off celestial rings with pitch-escalating crystalline chimes and fireworks.
+  - **Ultra-Prominent Developer Showcase (Dhoni & Prathik):**
+    - High-visibility vector typography (`cinematic_black.ttf` & `cinematic_bold.ttf`) with 24px deep contrast outlines, linear mipmap filtering, and billboard rendering for razor-sharp legibility.
+    - Features dedicated multi-tiered developer spotlight nodes:
+      - `★ GAME DEVELOPERS ★` (Gold shimmering header)
+      - `DHONI & PRATHIK` (Giant 60pt font, high-contrast cyan with golden outline)
+      - `✦ CREATED BY DHONI AND PRATHIK ✦`
+  - **5-Act Choreographed Timeline:**
+    - **Act 1 (0.0s–6.0s): The Dark Silhouette** — Pitch black stage; only glowing purple staff orb illuminates wizard dancing with mystical wand flourishes.
+    - **Act 2 (6.0s–12.0s): The Dawn of Light** — Staff tap ignites overhead spotlight and soft ambient glow; wizard dances with twin fireballs; reveals `✦ MYSTIC REALMS • THE POWER OF MAGIC ✦`.
+    - **Act 3 (12.0s–19.0s): Full Arena Illumination** — Sun, rim, and stage lights engage fully; high pirouette leap, 4-way cross-volley ricochets off metallic rings; monumental bounce-drop of `GAME: BOUNCE BACK`.
+    - **Act 4 (19.0s–26.0s): Dedicated Developer Spotlight** — Skyward Astral Void beam bursts into fireworks; spotlights center directly onto `★ GAME DEVELOPERS ★ DHONI & PRATHIK`.
+    - **Act 5 (26.0s–30.0s): Triumphant Victory Pose** — Radiant victory stance with glowing wand aura, pulsing `[ PRESS SPACE / ENTER / CLICK TO PLAY ]` prompt, and smooth auto-transition to Main Menu at 30.0s (or instant skip on any key/click).
 
 ---
 
@@ -108,7 +118,7 @@ A complete, polished fantasy action adventure platformer built in **Godot 4.x**,
   - Hidden behind a breakable cracked wall at high altitude ($X=1570, Y=180$).
   - Features floating astral crystals and the legendary **God Relic Shrine**.
   - Awakening the shrine bestows **$+1,500$ Max HP**, **$+500$ Max MP**, accelerated mana regeneration, **$+35\%$ movement speed**, **$+60\%$ damage**, **$+50\%$ Rebound meter rate**, and unlocks the player's ultimate abilities!
-- **The Ultimate Supreme Boss:** **PRIMORDIAL VOID EMPEROR MALAKOR** (**50,000 HP**)
+- **The Ultimate Supreme Boss:** **PRIMORDIAL VOID EMPEROR MALAKOR** (**10,000 HP**)
 - **Dedicated Systems & 8 Core Ability Trees:**
   1. **Teleportation:** Instantly phases behind player for ambush combos; teleports randomly across the arena; dark vortex rifts with audio/visual feedback; dynamic cooldowns (3.5s $\to$ 1.0s).
   2. **Super Speed:** Sprints at supersonic speeds (220 $\to$ 550 px/s) with rapid acceleration; high-speed dash attacks (850-1000 px/s); fading motion trail ghosts (`BossGhostTrail`); instant responsive turning.
@@ -119,16 +129,16 @@ A complete, polished fantasy action adventure platformer built in **Godot 4.x**,
      - **Full-Screen Dark Energy Beam:** Red laser aim guide telegraph charging into a devastating full-screen destructive beam.
   5. **Special Abilities:**
      - **Minion Summoning:** Spawns flying bats, shadow monsters, and fire demons from void portals.
-     - **Protective Shield:** Spawns a 2,500 HP glowing hexagonal void barrier absorbing all damage until shattered.
-     - **Health Regeneration:** Channels dark siphon runes recovering 1,200 HP/tick (+3,600 HP total).
+     - **Protective Shield:** Spawns a 1,000 HP glowing hexagonal void barrier absorbing all damage until shattered.
+     - **Health Regeneration:** Channels dark siphon runes recovering 350 HP/tick (+1,050 HP total).
      - **Ground Slam & Energy Waves:** Leaps high, plunges violently at 1250 px/s, releasing twin high-speed ground-slicing energy waves left and right.
   6. **4-Phase System & Appearance Transformations:**
-     - **Phase 1 (50,000 - 37,500 HP):** Obsidian Void Armor with Deep Violet Aura (Scale $1.1\times$, Speed 220 px/s).
-     - **Phase 2 (37,500 - 25,000 HP):** Crimson Void Surge with glowing red eye flares & fire trail (Speed 320 px/s, contact damage +30%, dash attacks, stun shockwave, minion summons).
-     - **Phase 3 (25,000 - 10,000 HP):** Astral Cosmic Electric Cyan with celestial wings (Speed 420 px/s, instant teleport behind player combos, protective shield, dark energy beam, health regen).
-     - **Phase 4 (10,000 - 0 HP):** Supreme Apocalyptic Rage Mode (Solar Gold Overdrive glow, Speed 550 px/s, massive triple explosions, full-screen beams, 14-orb spiral bullet hell, relentless rage roaring!).
+     - **Phase 1 (10,000 - 7,500 HP):** Obsidian Void Armor with Deep Violet Aura (Scale $1.1\times$, Speed 220 px/s).
+     - **Phase 2 (7,500 - 5,000 HP):** Crimson Void Surge with glowing red eye flares & fire trail (Speed 320 px/s, contact damage +30%, dash attacks, stun shockwave, minion summons).
+     - **Phase 3 (5,000 - 2,500 HP):** Astral Cosmic Electric Cyan with celestial wings (Speed 420 px/s, instant teleport behind player combos, protective shield, dark energy beam, health regen).
+     - **Phase 4 (2,500 - 0 HP):** Supreme Apocalyptic Rage Mode (Solar Gold Overdrive glow, Speed 550 px/s, massive triple explosions, full-screen beams, 14-orb spiral bullet hell, relentless rage roaring!).
   7. **Dedicated Large Boss Health Bar UI:**
-     - Displays title, active phase badges (`[PHASE 1]` to `[PHASE 4: ULTIMATE RAGE]`), numerical HP (`50,000 / 50,000 HP (100%)`), and smooth animated bar with phase-shifting glow colors.
+     - Displays title, active phase badges (`[PHASE 1]` to `[PHASE 4: ULTIMATE RAGE]`), numerical HP (`10,000 / 10,000 HP (100%)`), and smooth animated bar with phase-shifting glow colors.
   8. **All 9 Dedicated Animations:** `idle`, `running`, `teleporting`, `attacking`, `dashing`, `taking_damage`, `stunned`, `ultimate_attack`, `death`.
 
 ---
