@@ -29,7 +29,9 @@ var cooldowns = {
 	"fireball": 0.0,
 	"ice_blast": 0.0,
 	"lightning": 0.0,
-	"shield": 0.0
+	"shield": 0.0,
+	"void_cannon": 0.0,
+	"shadow_step": 0.0
 }
 
 # Preloaded ability scenes
@@ -37,6 +39,7 @@ const SCENE_FIREBALL = preload("res://scenes/abilities/fireball.tscn")
 const SCENE_ICE_BLAST = preload("res://scenes/abilities/ice_blast.tscn")
 const SCENE_LIGHTNING = preload("res://scenes/abilities/lightning_strike.tscn")
 const SCENE_SHIELD = preload("res://scenes/abilities/magic_shield.tscn")
+const SCENE_VOID_CANNON = preload("res://scenes/abilities/astral_void_cannon.tscn")
 
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 @onready var cast_point: Marker2D = $CastPoint
@@ -207,6 +210,12 @@ func _handle_spells() -> void:
 	# Magic Shield (I)
 	elif Input.is_action_just_pressed("shield"):
 		_try_cast("shield", _cast_shield)
+	# Astral Void Cannon (E)
+	elif Input.is_action_just_pressed("void_cannon"):
+		_try_cast("void_cannon", _cast_void_cannon)
+	# Chronos Shadow Step (F)
+	elif Input.is_action_just_pressed("shadow_step"):
+		_try_cast("shadow_step", _cast_shadow_step)
 
 func _get_aim_direction() -> Vector2:
 	# If mouse was clicked or is far from player, aim towards mouse
@@ -296,6 +305,78 @@ func _cast_shield() -> void:
 			c.queue_free()
 	var s = SCENE_SHIELD.instantiate()
 	add_child(s)
+
+func _cast_void_cannon() -> void:
+	SoundManager.play_sfx("lightning")
+	SoundManager.play_sfx_pitched("fireball", 0.6)
+	var shoot_dir = _get_aim_direction()
+	var vc = SCENE_VOID_CANNON.instantiate()
+	vc.global_position = cast_point.global_position
+	vc.direction = facing
+	vc.velocity = shoot_dir * 620.0
+	get_parent().add_child(vc)
+	
+	# Massive Rocket Kickback
+	_apply_magical_recoil(shoot_dir * 1.6)
+
+func _cast_shadow_step() -> void:
+	# Spawns shadow ghost at start
+	BossGhostTrail.spawn_ghost(self, anim, Color(0.8, 0.3, 1.0, 0.9), 0.35)
+	_spawn_teleport_effect(global_position)
+	
+	clear_stun()
+	
+	var dir = Input.get_axis("move_left", "move_right")
+	if dir == 0.0:
+		dir = facing
+	var target_offset = Vector2(dir * 220.0, 0.0)
+	
+	# Check vertical aiming or holding up/down
+	if Input.is_action_pressed("jump") or Input.is_key_pressed(KEY_W):
+		target_offset.y -= 120.0
+	elif Input.is_key_pressed(KEY_S):
+		target_offset.y += 120.0
+		
+	# Raycast against World Geometry (Collision Layer 1) to prevent teleporting into solid blocks
+	var space_state = get_world_2d().direct_space_state
+	var query = PhysicsRayQueryParameters2D.create(global_position, global_position + target_offset, 1)
+	query.exclude = [self]
+	var hit = space_state.intersect_ray(query)
+	var final_pos = global_position + target_offset
+	if hit:
+		final_pos = hit.position - target_offset.normalized() * 16.0
+		
+	global_position = final_pos
+	velocity = Vector2(dir * 180.0, -100.0)
+	
+	# Brief i-frames
+	GameManager.is_invulnerable = true
+	var inv_tween = create_tween()
+	inv_tween.tween_interval(0.30)
+	inv_tween.tween_callback(func(): GameManager.is_invulnerable = false)
+	
+	BossGhostTrail.spawn_ghost(self, anim, Color(0.4, 0.8, 1.0, 0.8), 0.30)
+	_spawn_teleport_effect(global_position)
+	
+	SoundManager.play_sfx("teleport")
+	SoundManager.play_sfx_pitched("crystal", 1.4)
+	GameManager.pop_floating_text("CHRONOS SHADOW STEP!", global_position + Vector2(0, -35), Color(0.6, 0.9, 1.0))
+	GameManager.add_rebound(15.0)
+
+func _spawn_teleport_effect(pos: Vector2) -> void:
+	var effect = Sprite2D.new()
+	var tex = load("res://assets/effects/projectiles/teleport_vortex.png")
+	if tex:
+		effect.texture = tex
+	effect.global_position = pos
+	effect.top_level = true
+	effect.scale = Vector2(0.3, 0.3)
+	effect.modulate = Color(0.6, 0.2, 1.0, 0.8)
+	get_parent().add_child(effect)
+	var tween = effect.create_tween()
+	tween.tween_property(effect, "scale", Vector2(1.2, 1.2), 0.25)
+	tween.parallel().tween_property(effect, "modulate:a", 0.0, 0.25)
+	tween.tween_callback(effect.queue_free)
 
 func _update_animation() -> void:
 	# Overdrive golden brilliance

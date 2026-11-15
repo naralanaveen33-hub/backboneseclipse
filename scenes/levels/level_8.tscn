@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3]
+[gd_scene load_steps=27 format=3]
 
 [ext_resource type="Script" path="res://scripts/systems/level_controller.gd" id="1_ctrl"]
 [ext_resource type="Texture2D" path="res://assets/backgrounds/ultimate_void/ultimate_sky.png" id="2_sky"]
@@ -24,6 +24,8 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/game_over_menu.tscn" id="22_gomenu"]
 [ext_resource type="PackedScene" path="res://scenes/objects/ruined_shrine.tscn" id="23_shrine"]
 [ext_resource type="PackedScene" path="res://scenes/objects/level_portal.tscn" id="24_port"]
+[ext_resource type="PackedScene" path="res://scenes/objects/god_relic_shrine.tscn" id="25_godshrine"]
+[ext_resource type="PackedScene" path="res://scenes/objects/secret_wall.tscn" id="26_secwall"]
 
 [sub_resource type="RectangleShape2D" id="Shape_160"]
 size = Vector2(160, 32)
@@ -351,7 +353,7 @@ shape = SubResource("Shape_80")
 one_way_collision = true
 
 [node name="Float_7" type="StaticBody2D" parent="Platforms"]
-position = Vector2(2200, 340)
+position = Vector2(1480, 230)
 collision_layer = 1
 collision_mask = 6
 
@@ -363,7 +365,7 @@ shape = SubResource("Shape_80")
 one_way_collision = true
 
 [node name="Float_8" type="StaticBody2D" parent="Platforms"]
-position = Vector2(2360, 260)
+position = Vector2(1650, 180)
 collision_layer = 1
 collision_mask = 6
 
@@ -375,7 +377,7 @@ shape = SubResource("Shape_80")
 one_way_collision = true
 
 [node name="Float_9" type="StaticBody2D" parent="Platforms"]
-position = Vector2(2560, 220)
+position = Vector2(1770, 180)
 collision_layer = 1
 collision_mask = 6
 
@@ -387,7 +389,7 @@ shape = SubResource("Shape_80")
 one_way_collision = true
 
 [node name="Float_10" type="StaticBody2D" parent="Platforms"]
-position = Vector2(2740, 260)
+position = Vector2(1890, 180)
 collision_layer = 1
 collision_mask = 6
 
@@ -399,7 +401,7 @@ shape = SubResource("Shape_80")
 one_way_collision = true
 
 [node name="Float_11" type="StaticBody2D" parent="Platforms"]
-position = Vector2(2900, 340)
+position = Vector2(2200, 340)
 collision_layer = 1
 collision_mask = 6
 
@@ -407,6 +409,54 @@ collision_mask = 6
 texture = ExtResource("6_p80")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Float_11"]
+shape = SubResource("Shape_80")
+one_way_collision = true
+
+[node name="Float_12" type="StaticBody2D" parent="Platforms"]
+position = Vector2(2360, 260)
+collision_layer = 1
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/Float_12"]
+texture = ExtResource("6_p80")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Float_12"]
+shape = SubResource("Shape_80")
+one_way_collision = true
+
+[node name="Float_13" type="StaticBody2D" parent="Platforms"]
+position = Vector2(2560, 220)
+collision_layer = 1
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/Float_13"]
+texture = ExtResource("6_p80")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Float_13"]
+shape = SubResource("Shape_80")
+one_way_collision = true
+
+[node name="Float_14" type="StaticBody2D" parent="Platforms"]
+position = Vector2(2740, 260)
+collision_layer = 1
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/Float_14"]
+texture = ExtResource("6_p80")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Float_14"]
+shape = SubResource("Shape_80")
+one_way_collision = true
+
+[node name="Float_15" type="StaticBody2D" parent="Platforms"]
+position = Vector2(2900, 340)
+collision_layer = 1
+collision_mask = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Platforms/Float_15"]
+texture = ExtResource("6_p80")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Float_15"]
 shape = SubResource("Shape_80")
 one_way_collision = true
 
@@ -436,6 +486,14 @@ stat_buff = "hp"
 position = Vector2(1260, 216)
 stat_buff = "rebound"
 
+[node name="SecretRoom" type="Node2D" parent="."]
+
+[node name="SecretWall" parent="SecretRoom" instance=ExtResource("26_secwall")]
+position = Vector2(1570, 180)
+
+[node name="GodRelicShrine" parent="SecretRoom" instance=ExtResource("25_godshrine")]
+position = Vector2(1770, 140)
+
 [node name="Sign_0" parent="." instance=ExtResource("12_sign")]
 position = Vector2(140, 420)
 message = "👑 THE PRIMORDIAL SINGULARITY CORE (LEVEL 8) 👑\nThe Ultimate Void Sovereign Malakor awaits ahead with 50,000 HP!"
@@ -445,6 +503,10 @@ position = Vector2(980, 420)
 message = "TIP: Deflect his Dark Energy Balls with Timed Parry! Rocket-Jump over Ground Waves! Crack his Shield!"
 
 [node name="Sign_2" parent="." instance=ExtResource("12_sign")]
+position = Vector2(1670, 140)
+message = "✦ THE ANCIENT ASTRAL SANCTUM (SECRET ROOM) ✦\nAwaken the God Relic Shrine! Grants +1,500 HP, +500 MP, and Unlocks Astral Void Cannon [E] & Chronos Shadow Step [F]!"
+
+[node name="Sign_3" parent="." instance=ExtResource("12_sign")]
 position = Vector2(1940, 420)
 message = "CAUTION: BEYOND THIS GATE LIES THE 4-PHASE APOCALYPSE! PREPARE YOUR OVERDRIVE!"
 
@@ -476,18 +538,30 @@ position = Vector2(1460, 270)
 position = Vector2(1640, 410)
 
 [node name="Crystal_9" parent="." instance=ExtResource("10_crys")]
-position = Vector2(2200, 300)
+position = Vector2(1710, 100)
 
 [node name="Crystal_10" parent="." instance=ExtResource("10_crys")]
-position = Vector2(2360, 220)
+position = Vector2(1750, 80)
 
 [node name="Crystal_11" parent="." instance=ExtResource("10_crys")]
-position = Vector2(2560, 180)
+position = Vector2(1790, 80)
 
 [node name="Crystal_12" parent="." instance=ExtResource("10_crys")]
-position = Vector2(2740, 220)
+position = Vector2(1830, 100)
 
 [node name="Crystal_13" parent="." instance=ExtResource("10_crys")]
+position = Vector2(2200, 300)
+
+[node name="Crystal_14" parent="." instance=ExtResource("10_crys")]
+position = Vector2(2360, 220)
+
+[node name="Crystal_15" parent="." instance=ExtResource("10_crys")]
+position = Vector2(2560, 180)
+
+[node name="Crystal_16" parent="." instance=ExtResource("10_crys")]
+position = Vector2(2740, 220)
+
+[node name="Crystal_17" parent="." instance=ExtResource("10_crys")]
 position = Vector2(2900, 300)
 
 [node name="Enemies" type="Node2D" parent="."]

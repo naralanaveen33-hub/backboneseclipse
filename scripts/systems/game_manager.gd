@@ -45,7 +45,9 @@ var unlocked_powers = {
 	"fireball": true,
 	"ice_blast": true,
 	"lightning": false,
-	"shield": false
+	"shield": false,
+	"void_cannon": false,
+	"shadow_step": false
 }
 
 const ABILITY_DATA = {
@@ -77,6 +79,19 @@ const ABILITY_DATA = {
 		"duration": 5.0,
 		"key": "I",
 		"name": "Magic Shield"
+	},
+	"void_cannon": {
+		"cost": 40.0,
+		"cooldown": 2.2,
+		"damage": 650.0,
+		"key": "E",
+		"name": "Astral Void Cannon"
+	},
+	"shadow_step": {
+		"cost": 15.0,
+		"cooldown": 1.2,
+		"key": "F",
+		"name": "Chronos Shadow Step"
 	}
 }
 
@@ -113,6 +128,8 @@ func _ensure_input_mappings() -> void:
 		"ice_blast": [KEY_K],
 		"lightning": [KEY_L],
 		"shield": [KEY_I],
+		"void_cannon": [KEY_E],
+		"shadow_step": [KEY_F],
 		"parry": [KEY_SHIFT, KEY_I],
 		"rebound": [KEY_Q],
 		"restart": [KEY_R],
@@ -162,6 +179,10 @@ func start_level(level_num: int) -> void:
 	if level_num >= 2:
 		unlocked_powers["lightning"] = true
 		unlocked_powers["shield"] = true
+		
+	if level_num >= 8:
+		unlocked_powers["void_cannon"] = true
+		unlocked_powers["shadow_step"] = true
 		
 	var path = "res://scenes/levels/level_%d.tscn" % level_num
 	get_tree().change_scene_to_file(path)

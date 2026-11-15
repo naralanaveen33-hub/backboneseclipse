@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3]
+[gd_scene load_steps=26 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_script"]
 [ext_resource type="Texture2D" path="res://assets/ui/bar_bg.png" id="2_bg"]
@@ -19,6 +19,8 @@
 [ext_resource type="Script" path="res://scripts/ui/screen_flash.gd" id="17_flash"]
 [ext_resource type="Script" path="res://scripts/ui/crt_overlay.gd" id="18_crt"]
 [ext_resource type="Texture2D" path="res://assets/ui/panel_bg.png" id="19_panel"]
+[ext_resource type="Texture2D" path="res://assets/ui/ability_void_cannon.png" id="20_void"]
+[ext_resource type="Texture2D" path="res://assets/ui/ability_shadow_step.png" id="21_step"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_tutorial_title"]
 font = ExtResource("16_pixelfontbig")
@@ -159,9 +161,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -100.0
+offset_left = -160.0
 offset_top = -60.0
-offset_right = 100.0
+offset_right = 160.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -338,6 +340,102 @@ offset_right = -2.0
 grow_horizontal = 0
 grow_vertical = 0
 text = "I"
+label_settings = SubResource("LabelSettings_key")
+horizontal_alignment = 2
+
+[node name="SlotVoidCannon" type="Control" parent="AbilitiesBar"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="AbilitiesBar/SlotVoidCannon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("20_void")
+
+[node name="CDProgress" type="TextureProgressBar" parent="AbilitiesBar/SlotVoidCannon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+fill_mode = 5
+texture_progress = ExtResource("10_cd")
+
+[node name="LockOverlay" type="TextureRect" parent="AbilitiesBar/SlotVoidCannon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_lock")
+
+[node name="KeyLabel" type="Label" parent="AbilitiesBar/SlotVoidCannon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -14.0
+offset_top = -14.0
+offset_right = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "E"
+label_settings = SubResource("LabelSettings_key")
+horizontal_alignment = 2
+
+[node name="SlotShadowStep" type="Control" parent="AbilitiesBar"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="AbilitiesBar/SlotShadowStep"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("21_step")
+
+[node name="CDProgress" type="TextureProgressBar" parent="AbilitiesBar/SlotShadowStep"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+fill_mode = 5
+texture_progress = ExtResource("10_cd")
+
+[node name="LockOverlay" type="TextureRect" parent="AbilitiesBar/SlotShadowStep"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_lock")
+
+[node name="KeyLabel" type="Label" parent="AbilitiesBar/SlotShadowStep"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -14.0
+offset_top = -14.0
+offset_right = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "F"
 label_settings = SubResource("LabelSettings_key")
 horizontal_alignment = 2
 

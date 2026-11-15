@@ -1,7 +1,7 @@
 import os
 
 def build_level_8():
-    tscn = """[gd_scene load_steps=25 format=3]
+    tscn = """[gd_scene load_steps=27 format=3]
 
 [ext_resource type="Script" path="res://scripts/systems/level_controller.gd" id="1_ctrl"]
 [ext_resource type="Texture2D" path="res://assets/backgrounds/ultimate_void/ultimate_sky.png" id="2_sky"]
@@ -27,6 +27,8 @@ def build_level_8():
 [ext_resource type="PackedScene" path="res://scenes/ui/game_over_menu.tscn" id="22_gomenu"]
 [ext_resource type="PackedScene" path="res://scenes/objects/ruined_shrine.tscn" id="23_shrine"]
 [ext_resource type="PackedScene" path="res://scenes/objects/level_portal.tscn" id="24_port"]
+[ext_resource type="PackedScene" path="res://scenes/objects/god_relic_shrine.tscn" id="25_godshrine"]
+[ext_resource type="PackedScene" path="res://scenes/objects/secret_wall.tscn" id="26_secwall"]
 
 [sub_resource type="RectangleShape2D" id="Shape_160"]
 size = Vector2(160, 32)
@@ -97,6 +99,8 @@ shape = SubResource("Shape_160")
     floats = [
         (420, 340), (560, 260), (740, 330), (860, 260),
         (1100, 330), (1260, 250), (1460, 320),
+        # Secret Room Access & Platforms
+        (1480, 230), (1650, 180), (1770, 180), (1890, 180),
         # Platforms inside the Ultimate Boss Arena (X=2080 to 2900)
         (2200, 340), (2360, 260), (2560, 220), (2740, 260), (2900, 340)
     ]
@@ -150,10 +154,22 @@ stat_buff = "rebound"
 
 """
 
+    # Secret Room: Cracked Secret Wall + God Relic Shrine
+    tscn += """[node name="SecretRoom" type="Node2D" parent="."]
+
+[node name="SecretWall" parent="SecretRoom" instance=ExtResource("26_secwall")]
+position = Vector2(1570, 180)
+
+[node name="GodRelicShrine" parent="SecretRoom" instance=ExtResource("25_godshrine")]
+position = Vector2(1770, 140)
+
+"""
+
     # Signs
     signs = [
         (140, 420, "👑 THE PRIMORDIAL SINGULARITY CORE (LEVEL 8) 👑\\nThe Ultimate Void Sovereign Malakor awaits ahead with 50,000 HP!"),
         (980, 420, "TIP: Deflect his Dark Energy Balls with Timed Parry! Rocket-Jump over Ground Waves! Crack his Shield!"),
+        (1670, 140, "✦ THE ANCIENT ASTRAL SANCTUM (SECRET ROOM) ✦\\nAwaken the God Relic Shrine! Grants +1,500 HP, +500 MP, and Unlocks Astral Void Cannon [E] & Chronos Shadow Step [F]!"),
         (1940, 420, "CAUTION: BEYOND THIS GATE LIES THE 4-PHASE APOCALYPSE! PREPARE YOUR OVERDRIVE!")
     ]
     for i, (sx, sy, msg) in enumerate(signs):
@@ -163,10 +179,13 @@ message = "{msg}"
 
 """
 
-    # Crystals
+    # Crystals (including secret room glowing crystals)
     crys = [
         (220, 410), (360, 350), (560, 210), (740, 290), (860, 220),
         (1100, 290), (1260, 200), (1460, 270), (1640, 410),
+        # Secret room crystals
+        (1710, 100), (1750, 80), (1790, 80), (1830, 100),
+        # Boss arena crystals
         (2200, 300), (2360, 220), (2560, 180), (2740, 220), (2900, 300)
     ]
     for i, (cx, cy) in enumerate(crys):

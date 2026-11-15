@@ -153,7 +153,7 @@ func _ready() -> void:
 	print("  -> Player Stun system and recovery verified OK.")
 
 	# Test 9: Verify All 8 Levels & Menus
-	print("[TEST 9/9] Verifying All 8 Levels & UI Menus Loading...")
+	print("[TEST 9/11] Verifying All 8 Levels & UI Menus Loading...")
 	for lvl_i in range(1, 9):
 		var lvl_path = "res://scenes/levels/level_%d.tscn" % lvl_i
 		var lvl_res = load(lvl_path)
@@ -167,7 +167,58 @@ func _ready() -> void:
 	assert(victory != null, "Victory scene must load")
 	print("  -> All 8 levels, Level Select and menus loaded successfully.")
 
+	# Test 10: Player Ultimate Powers & Enhanced Sprite Frames
+	print("[TEST 10/11] Verifying Player Ultimate Powers & Enhanced Sprite Frames...")
+	var player_test = player_scene.instantiate() as Player
+	add_child(player_test)
+	player_test.is_spawning = false
+	assert(player_test.anim.sprite_frames != null, "Player must have AnimatedSprite2D SpriteFrames")
+	var anim_list = player_test.anim.sprite_frames.get_animation_names()
+	assert("idle" in anim_list and "run" in anim_list and "attack" in anim_list and "death" in anim_list, "Player animations must include idle, run, attack, death")
+	
+	# Test Astral Void Cannon
+	GameManager.unlocked_powers["void_cannon"] = true
+	var cannon_scene = load("res://scenes/abilities/astral_void_cannon.tscn")
+	assert(cannon_scene != null, "Astral Void Cannon scene must exist")
+	var cannon = cannon_scene.instantiate()
+	add_child(cannon)
+	assert(cannon.damage == 650.0, "Void cannon default damage is 650.0")
+	assert(cannon.max_bounces >= 4, "Void cannon must bounce at least 4 times")
+	cannon.queue_free()
+	
+	# Test Chronos Shadow Step
+	GameManager.unlocked_powers["shadow_step"] = true
+	player_test._cast_shadow_step()
+	assert(GameManager.is_invulnerable == true, "Shadow step grants brief invulnerability")
+	player_test.queue_free()
+	print("  -> Player Ultimate Powers (Void Cannon, Shadow Step) & Animations verified OK.")
+
+	# Test 11: Secret Room & God Relic Shrine in Level 8
+	print("[TEST 11/11] Verifying Level 8 Secret Room, God Relic Shrine & Secret Wall...")
+	var shrine_res = load("res://scenes/objects/god_relic_shrine.tscn")
+	assert(shrine_res != null, "God Relic Shrine scene must exist")
+	var g_shrine = shrine_res.instantiate() as GodRelicShrine
+	add_child(g_shrine)
+	assert(g_shrine.is_active == false, "God Relic Shrine starts inactive")
+	g_shrine.activate_shrine()
+	assert(g_shrine.is_active == true, "God Relic Shrine becomes active")
+	assert(GameManager.player_max_hp == 1500.0, "God Relic Shrine grants 1,500 Max HP")
+	assert(GameManager.player_max_mp == 500.0, "God Relic Shrine grants 500 Max MP")
+	assert(GameManager.unlocked_powers["void_cannon"] == true, "God Relic unlocks Astral Void Cannon")
+	assert(GameManager.unlocked_powers["shadow_step"] == true, "God Relic unlocks Chronos Shadow Step")
+	g_shrine.queue_free()
+
+	var secwall_res = load("res://scenes/objects/secret_wall.tscn")
+	assert(secwall_res != null, "Secret Wall scene must exist")
+	var secwall = secwall_res.instantiate() as SecretWall
+	add_child(secwall)
+	assert(secwall.is_revealed == false, "Secret Wall starts unrevealed")
+	secwall.reveal_secret()
+	assert(secwall.is_revealed == true, "Secret Wall becomes revealed")
+	secwall.queue_free()
+	print("  -> Secret Room God Relic Shrine (+1500 HP, +500 MP) and Secret Wall verified OK.")
+
 	print("==================================================")
-	print("   ALL 9 ADVANCED TESTS PASSED 100%!             ")
+	print("   ALL 11 ADVANCED TESTS PASSED 100%!            ")
 	print("==================================================")
 	get_tree().quit(0)

@@ -13,9 +13,13 @@ extends CanvasLayer
 @onready var cd_ice: TextureProgressBar = $AbilitiesBar/SlotIce/CDProgress
 @onready var cd_lightning: TextureProgressBar = $AbilitiesBar/SlotLightning/CDProgress
 @onready var cd_shield: TextureProgressBar = $AbilitiesBar/SlotShield/CDProgress
+@onready var cd_void_cannon: TextureProgressBar = $AbilitiesBar/SlotVoidCannon/CDProgress if has_node("AbilitiesBar/SlotVoidCannon/CDProgress") else null
+@onready var cd_shadow_step: TextureProgressBar = $AbilitiesBar/SlotShadowStep/CDProgress if has_node("AbilitiesBar/SlotShadowStep/CDProgress") else null
 
 @onready var lock_lightning: TextureRect = $AbilitiesBar/SlotLightning/LockOverlay
 @onready var lock_shield: TextureRect = $AbilitiesBar/SlotShield/LockOverlay
+@onready var lock_void_cannon: TextureRect = $AbilitiesBar/SlotVoidCannon/LockOverlay if has_node("AbilitiesBar/SlotVoidCannon/LockOverlay") else null
+@onready var lock_shadow_step: TextureRect = $AbilitiesBar/SlotShadowStep/LockOverlay if has_node("AbilitiesBar/SlotShadowStep/LockOverlay") else null
 
 # Boss bar
 @onready var boss_container: VBoxContainer = $BossContainer
@@ -68,6 +72,10 @@ func _process(_delta: float) -> void:
 func _update_locks() -> void:
 	lock_lightning.visible = not GameManager.unlocked_powers.get("lightning", false)
 	lock_shield.visible = not GameManager.unlocked_powers.get("shield", false)
+	if lock_void_cannon:
+		lock_void_cannon.visible = not GameManager.unlocked_powers.get("void_cannon", false)
+	if lock_shadow_step:
+		lock_shadow_step.visible = not GameManager.unlocked_powers.get("shadow_step", false)
 
 func _update_cooldown_visuals() -> void:
 	var fb_cd = player_ref.cooldowns["fireball"]
@@ -85,6 +93,16 @@ func _update_cooldown_visuals() -> void:
 	var sh_cd = player_ref.cooldowns["shield"]
 	var sh_max = GameManager.ABILITY_DATA["shield"]["cooldown"]
 	cd_shield.value = (sh_cd / sh_max) * 100.0 if sh_cd > 0 else 0.0
+
+	if cd_void_cannon and player_ref.cooldowns.has("void_cannon"):
+		var vc_cd = player_ref.cooldowns["void_cannon"]
+		var vc_max = GameManager.ABILITY_DATA["void_cannon"]["cooldown"]
+		cd_void_cannon.value = (vc_cd / vc_max) * 100.0 if vc_cd > 0 else 0.0
+
+	if cd_shadow_step and player_ref.cooldowns.has("shadow_step"):
+		var ss_cd = player_ref.cooldowns["shadow_step"]
+		var ss_max = GameManager.ABILITY_DATA["shadow_step"]["cooldown"]
+		cd_shadow_step.value = (ss_cd / ss_max) * 100.0 if ss_cd > 0 else 0.0
 
 func _on_hp_changed(hp: float, max_hp: float) -> void:
 	hp_bar.max_value = max_hp
